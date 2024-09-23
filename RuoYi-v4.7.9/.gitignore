@@ -40,7 +40,6 @@ nbdist/
 *.log
 *.xml.versionsBackup
 *.swp
-RuoYi-v4.7.9/ruoyi-admin/src/main/resources/application-druid.yml
 !*/build/*.java
 !*/build/*.html
 !*/build/*.xml
