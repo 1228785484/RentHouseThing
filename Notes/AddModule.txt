@@ -1,6 +1,0 @@
-新增个模块的方法是要先写个
-Controller:在RuoYi_Admin里面
-然后再去完成resources里面的system里面的文件
-新增个html或者vue界面
-然后再完成Mapper(MBP)
-完成Service Impl最后就ok了
