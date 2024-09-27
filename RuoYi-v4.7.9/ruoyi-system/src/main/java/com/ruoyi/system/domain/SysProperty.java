@@ -38,7 +38,7 @@ public class SysProperty extends BaseEntity
     private BigDecimal deposit;
 
     /** 是否可用 */
-    @Excel(name = "是否可用")
+    @Excel(name = "是否可用",readConverterExp = "0=否,1=是")
     private Integer available;
 
     /** 创建时间 */

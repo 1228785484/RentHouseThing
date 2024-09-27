@@ -1332,6 +1332,7 @@ public class ExcelUtil<T>
      * @param excel 数据注解
      * @return
      */
+
     public String dataFormatHandlerAdapter(Object value, Excel excel, Cell cell)
     {
         try
