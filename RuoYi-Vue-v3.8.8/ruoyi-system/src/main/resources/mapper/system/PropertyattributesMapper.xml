@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.PropertyattributesMapper">
+    
+    <resultMap type="Propertyattributes" id="PropertyattributesResult">
+        <result property="attributeId"    column="attribute_id"    />
+        <result property="propertyId"    column="property_id"    />
+        <result property="orientation"    column="orientation"    />
+        <result property="hasIndependentBathroom"    column="has_independent_bathroom"    />
+        <result property="hasAirConditioning"    column="has_air_conditioning"    />
+        <result property="numberOfBeds"    column="number_of_beds"    />
+        <result property="roomStructure"    column="room_structure"    />
+        <result property="hasBalcony"    column="has_balcony"    />
+        <result property="furnitureTypes"    column="furniture_types"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectPropertyattributesVo">
+        select attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at from propertyattributes
+    </sql>
+
+    <select id="selectPropertyattributesList" parameterType="Propertyattributes" resultMap="PropertyattributesResult">
+        <include refid="selectPropertyattributesVo"/>
+        <where>  
+            <if test="propertyId != null "> and property_id = #{propertyId}</if>
+            <if test="orientation != null  and orientation != ''"> and orientation = #{orientation}</if>
+            <if test="hasIndependentBathroom != null "> and has_independent_bathroom = #{hasIndependentBathroom}</if>
+            <if test="hasAirConditioning != null "> and has_air_conditioning = #{hasAirConditioning}</if>
+            <if test="numberOfBeds != null "> and number_of_beds = #{numberOfBeds}</if>
+            <if test="roomStructure != null  and roomStructure != ''"> and room_structure = #{roomStructure}</if>
+            <if test="hasBalcony != null "> and has_balcony = #{hasBalcony}</if>
+            <if test="furnitureTypes != null  and furnitureTypes != ''"> and furniture_types = #{furnitureTypes}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectPropertyattributesByAttributeId" parameterType="Long" resultMap="PropertyattributesResult">
+        <include refid="selectPropertyattributesVo"/>
+        where attribute_id = #{attributeId}
+    </select>
+
+    <insert id="insertPropertyattributes" parameterType="Propertyattributes" useGeneratedKeys="true" keyProperty="attributeId">
+        insert into propertyattributes
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="propertyId != null">property_id,</if>
+            <if test="orientation != null">orientation,</if>
+            <if test="hasIndependentBathroom != null">has_independent_bathroom,</if>
+            <if test="hasAirConditioning != null">has_air_conditioning,</if>
+            <if test="numberOfBeds != null">number_of_beds,</if>
+            <if test="roomStructure != null">room_structure,</if>
+            <if test="hasBalcony != null">has_balcony,</if>
+            <if test="furnitureTypes != null">furniture_types,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="propertyId != null">#{propertyId},</if>
+            <if test="orientation != null">#{orientation},</if>
+            <if test="hasIndependentBathroom != null">#{hasIndependentBathroom},</if>
+            <if test="hasAirConditioning != null">#{hasAirConditioning},</if>
+            <if test="numberOfBeds != null">#{numberOfBeds},</if>
+            <if test="roomStructure != null">#{roomStructure},</if>
+            <if test="hasBalcony != null">#{hasBalcony},</if>
+            <if test="furnitureTypes != null">#{furnitureTypes},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePropertyattributes" parameterType="Propertyattributes">
+        update propertyattributes
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="propertyId != null">property_id = #{propertyId},</if>
+            <if test="orientation != null">orientation = #{orientation},</if>
+            <if test="hasIndependentBathroom != null">has_independent_bathroom = #{hasIndependentBathroom},</if>
+            <if test="hasAirConditioning != null">has_air_conditioning = #{hasAirConditioning},</if>
+            <if test="numberOfBeds != null">number_of_beds = #{numberOfBeds},</if>
+            <if test="roomStructure != null">room_structure = #{roomStructure},</if>
+            <if test="hasBalcony != null">has_balcony = #{hasBalcony},</if>
+            <if test="furnitureTypes != null">furniture_types = #{furnitureTypes},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where attribute_id = #{attributeId}
+    </update>
+
+    <delete id="deletePropertyattributesByAttributeId" parameterType="Long">
+        delete from propertyattributes where attribute_id = #{attributeId}
+    </delete>
+
+    <delete id="deletePropertyattributesByAttributeIds" parameterType="String">
+        delete from propertyattributes where attribute_id in 
+        <foreach item="attributeId" collection="array" open="(" separator="," close=")">
+            #{attributeId}
+        </foreach>
+    </delete>
+</mapper>

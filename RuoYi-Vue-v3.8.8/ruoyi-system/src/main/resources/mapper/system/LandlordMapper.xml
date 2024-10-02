@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.LandlordMapper">
+    
+    <resultMap type="Landlord" id="LandlordResult">
+        <result property="landlordId"    column="landlord_id"    />
+        <result property="name"    column="name"    />
+        <result property="contactNumber"    column="contact_number"    />
+        <result property="email"    column="email"    />
+        <result property="identificationNumber"    column="identification_number"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectLandlordVo">
+        select landlord_id, name, contact_number, email, identification_number, created_at from landlord
+    </sql>
+
+    <select id="selectLandlordList" parameterType="Landlord" resultMap="LandlordResult">
+        <include refid="selectLandlordVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="contactNumber != null  and contactNumber != ''"> and contact_number = #{contactNumber}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="identificationNumber != null  and identificationNumber != ''"> and identification_number = #{identificationNumber}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectLandlordByLandlordId" parameterType="Long" resultMap="LandlordResult">
+        <include refid="selectLandlordVo"/>
+        where landlord_id = #{landlordId}
+    </select>
+
+    <insert id="insertLandlord" parameterType="Landlord" useGeneratedKeys="true" keyProperty="landlordId">
+        insert into landlord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="contactNumber != null and contactNumber != ''">contact_number,</if>
+            <if test="email != null">email,</if>
+            <if test="identificationNumber != null">identification_number,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="contactNumber != null and contactNumber != ''">#{contactNumber},</if>
+            <if test="email != null">#{email},</if>
+            <if test="identificationNumber != null">#{identificationNumber},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLandlord" parameterType="Landlord">
+        update landlord
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="contactNumber != null and contactNumber != ''">contact_number = #{contactNumber},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="identificationNumber != null">identification_number = #{identificationNumber},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where landlord_id = #{landlordId}
+    </update>
+
+    <delete id="deleteLandlordByLandlordId" parameterType="Long">
+        delete from landlord where landlord_id = #{landlordId}
+    </delete>
+
+    <delete id="deleteLandlordByLandlordIds" parameterType="String">
+        delete from landlord where landlord_id in 
+        <foreach item="landlordId" collection="array" open="(" separator="," close=")">
+            #{landlordId}
+        </foreach>
+    </delete>
+</mapper>

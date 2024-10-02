@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TenantMapper">
+    
+    <resultMap type="Tenant" id="TenantResult">
+        <result property="tenantId"    column="tenant_id"    />
+        <result property="name"    column="name"    />
+        <result property="contactNumber"    column="contact_number"    />
+        <result property="email"    column="email"    />
+        <result property="identificationNumber"    column="identification_number"    />
+        <result property="viewingDemand"    column="viewing_demand"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectTenantVo">
+        select tenant_id, name, contact_number, email, identification_number, viewing_demand, created_at from tenant
+    </sql>
+
+    <select id="selectTenantList" parameterType="Tenant" resultMap="TenantResult">
+        <include refid="selectTenantVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="contactNumber != null  and contactNumber != ''"> and contact_number = #{contactNumber}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="identificationNumber != null  and identificationNumber != ''"> and identification_number = #{identificationNumber}</if>
+            <if test="viewingDemand != null "> and viewing_demand = #{viewingDemand}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectTenantByTenantId" parameterType="Long" resultMap="TenantResult">
+        <include refid="selectTenantVo"/>
+        where tenant_id = #{tenantId}
+    </select>
+
+    <insert id="insertTenant" parameterType="Tenant" useGeneratedKeys="true" keyProperty="tenantId">
+        insert into tenant
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="contactNumber != null and contactNumber != ''">contact_number,</if>
+            <if test="email != null">email,</if>
+            <if test="identificationNumber != null">identification_number,</if>
+            <if test="viewingDemand != null">viewing_demand,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="contactNumber != null and contactNumber != ''">#{contactNumber},</if>
+            <if test="email != null">#{email},</if>
+            <if test="identificationNumber != null">#{identificationNumber},</if>
+            <if test="viewingDemand != null">#{viewingDemand},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTenant" parameterType="Tenant">
+        update tenant
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="contactNumber != null and contactNumber != ''">contact_number = #{contactNumber},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="identificationNumber != null">identification_number = #{identificationNumber},</if>
+            <if test="viewingDemand != null">viewing_demand = #{viewingDemand},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where tenant_id = #{tenantId}
+    </update>
+
+    <delete id="deleteTenantByTenantId" parameterType="Long">
+        delete from tenant where tenant_id = #{tenantId}
+    </delete>
+
+    <delete id="deleteTenantByTenantIds" parameterType="String">
+        delete from tenant where tenant_id in 
+        <foreach item="tenantId" collection="array" open="(" separator="," close=")">
+            #{tenantId}
+        </foreach>
+    </delete>
+</mapper>
