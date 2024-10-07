@@ -26,7 +26,7 @@ CREATE TABLE Property (
     address VARCHAR(255) NOT NULL COMMENT '地址',
     rent_price DECIMAL(10, 2) NOT NULL COMMENT '租金价格',
     deposit DECIMAL(10, 2) COMMENT '押金',
-    available INTEGER DEFAULT 1 COMMENT '是否可用，1为可用，0为不可用',
+    available INTEGER DEFAULT 1 COMMENT '是否可用',
     image_url VARCHAR(255) COMMENT '图片路径或URL',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     FOREIGN KEY (landlord_id) REFERENCES Landlord(landlord_id)
