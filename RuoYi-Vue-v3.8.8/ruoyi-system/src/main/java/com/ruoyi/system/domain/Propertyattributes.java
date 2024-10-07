@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 房源属性信息对象 propertyattributes
  * 
  * @author ruoyi
- * @date 2024-10-02
+ * @date 2024-10-07
  */
 public class Propertyattributes extends BaseEntity
 {
@@ -30,11 +30,11 @@ public class Propertyattributes extends BaseEntity
 
     /** 是否有独立卫浴 */
     @Excel(name = "是否有独立卫浴")
-    private Integer hasIndependentBathroom;
+    private String hasIndependentBathroom;
 
     /** 是否有空调 */
     @Excel(name = "是否有空调")
-    private Integer hasAirConditioning;
+    private String hasAirConditioning;
 
     /** 几人间 */
     @Excel(name = "几人间")
@@ -46,7 +46,7 @@ public class Propertyattributes extends BaseEntity
 
     /** 是否有阳台 */
     @Excel(name = "是否有阳台")
-    private Integer hasBalcony;
+    private String hasBalcony;
 
     /** 家具种类 */
     @Excel(name = "家具种类")
@@ -84,21 +84,21 @@ public class Propertyattributes extends BaseEntity
     {
         return orientation;
     }
-    public void setHasIndependentBathroom(Integer hasIndependentBathroom) 
+    public void setHasIndependentBathroom(String hasIndependentBathroom) 
     {
         this.hasIndependentBathroom = hasIndependentBathroom;
     }
 
-    public Integer getHasIndependentBathroom() 
+    public String getHasIndependentBathroom() 
     {
         return hasIndependentBathroom;
     }
-    public void setHasAirConditioning(Integer hasAirConditioning) 
+    public void setHasAirConditioning(String hasAirConditioning) 
     {
         this.hasAirConditioning = hasAirConditioning;
     }
 
-    public Integer getHasAirConditioning() 
+    public String getHasAirConditioning() 
     {
         return hasAirConditioning;
     }
@@ -120,12 +120,12 @@ public class Propertyattributes extends BaseEntity
     {
         return roomStructure;
     }
-    public void setHasBalcony(Integer hasBalcony) 
+    public void setHasBalcony(String hasBalcony) 
     {
         this.hasBalcony = hasBalcony;
     }
 
-    public Integer getHasBalcony() 
+    public String getHasBalcony() 
     {
         return hasBalcony;
     }

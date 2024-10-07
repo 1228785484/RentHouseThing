@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="address != null  and address != ''"> and address = #{address}</if>
             <if test="rentPrice != null "> and rent_price = #{rentPrice}</if>
             <if test="deposit != null "> and deposit = #{deposit}</if>
-            <if test="available != null "> and available = #{available}</if>
+            <if test="available != null  and available != ''"> and available = #{available}</if>
             <if test="imageUrl != null  and imageUrl != ''"> and image_url = #{imageUrl}</if>
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
         </where>

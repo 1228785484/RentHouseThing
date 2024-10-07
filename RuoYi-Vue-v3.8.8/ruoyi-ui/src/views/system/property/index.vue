@@ -34,20 +34,14 @@
         />
       </el-form-item>
       <el-form-item label="是否可用" prop="available">
-        <el-input
-          v-model="queryParams.available"
-          placeholder="请输入是否可用"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="图片路径或URL" prop="imageUrl">
-        <el-input
-          v-model="queryParams.imageUrl"
-          placeholder="请输入图片路径或URL"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.available" placeholder="请选择是否可用" clearable>
+          <el-option
+            v-for="dict in dict.type.sys_normal_disable"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
@@ -116,8 +110,16 @@
       <el-table-column label="地址" align="center" prop="address" />
       <el-table-column label="租金价格" align="center" prop="rentPrice" />
       <el-table-column label="押金" align="center" prop="deposit" />
-      <el-table-column label="是否可用" align="center" prop="available" />
-      <el-table-column label="图片路径或URL" align="center" prop="imageUrl" />
+      <el-table-column label="是否可用" align="center" prop="available">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.available"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="图片路径" align="center" prop="imageUrl" width="100">
+        <template slot-scope="scope">
+          <image-preview :src="scope.row.imageUrl" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>
@@ -142,7 +144,7 @@
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -167,10 +169,16 @@
           <el-input v-model="form.deposit" placeholder="请输入押金" />
         </el-form-item>
         <el-form-item label="是否可用" prop="available">
-          <el-input v-model="form.available" placeholder="请输入是否可用" />
+          <el-radio-group v-model="form.available">
+            <el-radio
+              v-for="dict in dict.type.sys_normal_disable"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item label="图片路径或URL" prop="imageUrl">
-          <el-input v-model="form.imageUrl" placeholder="请输入图片路径或URL" />
+        <el-form-item label="图片路径" prop="imageUrl">
+          <image-upload v-model="form.imageUrl"/>
         </el-form-item>
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
@@ -194,6 +202,7 @@ import { listProperty, getProperty, delProperty, addProperty, updateProperty } f
 
 export default {
   name: "Property",
+  dicts: ['sys_normal_disable'],
   data() {
     return {
       // 遮罩层

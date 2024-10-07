@@ -9,22 +9,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="是否有独立卫浴" prop="hasIndependentBathroom">
-        <el-input
-          v-model="queryParams.hasIndependentBathroom"
-          placeholder="请输入是否有独立卫浴"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="是否有空调" prop="hasAirConditioning">
-        <el-input
-          v-model="queryParams.hasAirConditioning"
-          placeholder="请输入是否有空调"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="几人间" prop="numberOfBeds">
         <el-input
           v-model="queryParams.numberOfBeds"
@@ -37,14 +21,6 @@
         <el-input
           v-model="queryParams.roomStructure"
           placeholder="请输入房间结构"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="是否有阳台" prop="hasBalcony">
-        <el-input
-          v-model="queryParams.hasBalcony"
-          placeholder="请输入是否有阳台"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -159,20 +135,11 @@
         <el-form-item label="房源ID" prop="propertyId">
           <el-input v-model="form.propertyId" placeholder="请输入房源ID" />
         </el-form-item>
-        <el-form-item label="是否有独立卫浴" prop="hasIndependentBathroom">
-          <el-input v-model="form.hasIndependentBathroom" placeholder="请输入是否有独立卫浴" />
-        </el-form-item>
-        <el-form-item label="是否有空调" prop="hasAirConditioning">
-          <el-input v-model="form.hasAirConditioning" placeholder="请输入是否有空调" />
-        </el-form-item>
         <el-form-item label="几人间" prop="numberOfBeds">
           <el-input v-model="form.numberOfBeds" placeholder="请输入几人间" />
         </el-form-item>
         <el-form-item label="房间结构" prop="roomStructure">
           <el-input v-model="form.roomStructure" placeholder="请输入房间结构" />
-        </el-form-item>
-        <el-form-item label="是否有阳台" prop="hasBalcony">
-          <el-input v-model="form.hasBalcony" placeholder="请输入是否有阳台" />
         </el-form-item>
         <el-form-item label="家具种类" prop="furnitureTypes">
           <el-input v-model="form.furnitureTypes" type="textarea" placeholder="请输入内容" />

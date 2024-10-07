@@ -37,12 +37,12 @@ public class Property extends BaseEntity
     @Excel(name = "押金")
     private BigDecimal deposit;
 
-    /** 是否可用，1为可用，0为不可用 */
+    /** 是否可用 */
     @Excel(name = "是否可用")
-    private Long available;
+    private String available;
 
-    /** 图片路径或URL */
-    @Excel(name = "图片路径或URL")
+    /** 图片路径 */
+    @Excel(name = "图片路径")
     private String imageUrl;
 
     /** 创建时间 */
@@ -95,12 +95,12 @@ public class Property extends BaseEntity
     {
         return deposit;
     }
-    public void setAvailable(Long available) 
+    public void setAvailable(String available) 
     {
         this.available = available;
     }
 
-    public Long getAvailable() 
+    public String getAvailable() 
     {
         return available;
     }
