@@ -11,7 +11,7 @@ import com.ruoyi.system.service.IPropertyattributesService;
  * 房源属性信息Service业务层处理
  * 
  * @author ruoyi
- * @date 2024-10-07
+ * @date 2024-10-09
  */
 @Service
 public class PropertyattributesServiceImpl implements IPropertyattributesService 

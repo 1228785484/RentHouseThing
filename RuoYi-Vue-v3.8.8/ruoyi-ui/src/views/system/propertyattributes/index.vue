@@ -9,6 +9,36 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="朝向" prop="orientation">
+        <el-select v-model="queryParams.orientation" placeholder="请选择朝向" clearable>
+          <el-option
+            v-for="dict in dict.type.orientation"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="是否有独立卫浴" prop="hasIndependentBathroom">
+        <el-select v-model="queryParams.hasIndependentBathroom" placeholder="请选择是否有独立卫浴" clearable>
+          <el-option
+            v-for="dict in dict.type.sys_yes_no"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="是否有空调" prop="hasAirConditioning">
+        <el-select v-model="queryParams.hasAirConditioning" placeholder="请选择是否有空调" clearable>
+          <el-option
+            v-for="dict in dict.type.sys_yes_no"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="几人间" prop="numberOfBeds">
         <el-input
           v-model="queryParams.numberOfBeds"
@@ -24,6 +54,16 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
+      </el-form-item>
+      <el-form-item label="是否有阳台" prop="hasBalcony">
+        <el-select v-model="queryParams.hasBalcony" placeholder="请选择是否有阳台" clearable>
+          <el-option
+            v-for="dict in dict.type.sys_yes_no"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
@@ -89,12 +129,28 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="属性ID" align="center" prop="attributeId" />
       <el-table-column label="房源ID" align="center" prop="propertyId" />
-      <el-table-column label="朝向" align="center" prop="orientation" />
-      <el-table-column label="是否有独立卫浴" align="center" prop="hasIndependentBathroom" />
-      <el-table-column label="是否有空调" align="center" prop="hasAirConditioning" />
+      <el-table-column label="朝向" align="center" prop="orientation">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.orientation" :value="scope.row.orientation"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否有独立卫浴" align="center" prop="hasIndependentBathroom">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasIndependentBathroom"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否有空调" align="center" prop="hasAirConditioning">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasAirConditioning"/>
+        </template>
+      </el-table-column>
       <el-table-column label="几人间" align="center" prop="numberOfBeds" />
       <el-table-column label="房间结构" align="center" prop="roomStructure" />
-      <el-table-column label="是否有阳台" align="center" prop="hasBalcony" />
+      <el-table-column label="是否有阳台" align="center" prop="hasBalcony">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasBalcony"/>
+        </template>
+      </el-table-column>
       <el-table-column label="家具种类" align="center" prop="furnitureTypes" />
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
         <template slot-scope="scope">
@@ -135,11 +191,48 @@
         <el-form-item label="房源ID" prop="propertyId">
           <el-input v-model="form.propertyId" placeholder="请输入房源ID" />
         </el-form-item>
+        <el-form-item label="朝向" prop="orientation">
+          <el-select v-model="form.orientation" placeholder="请选择朝向">
+            <el-option
+              v-for="dict in dict.type.orientation"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否有独立卫浴" prop="hasIndependentBathroom">
+          <el-radio-group v-model="form.hasIndependentBathroom">
+            <el-radio
+              v-for="dict in dict.type.sys_yes_no"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="是否有空调" prop="hasAirConditioning">
+          <el-radio-group v-model="form.hasAirConditioning">
+            <el-radio
+              v-for="dict in dict.type.sys_yes_no"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="几人间" prop="numberOfBeds">
           <el-input v-model="form.numberOfBeds" placeholder="请输入几人间" />
         </el-form-item>
         <el-form-item label="房间结构" prop="roomStructure">
           <el-input v-model="form.roomStructure" placeholder="请输入房间结构" />
+        </el-form-item>
+        <el-form-item label="是否有阳台" prop="hasBalcony">
+          <el-radio-group v-model="form.hasBalcony">
+            <el-radio
+              v-for="dict in dict.type.sys_yes_no"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="家具种类" prop="furnitureTypes">
           <el-input v-model="form.furnitureTypes" type="textarea" placeholder="请输入内容" />
@@ -166,6 +259,7 @@ import { listPropertyattributes, getPropertyattributes, delPropertyattributes, a
 
 export default {
   name: "Propertyattributes",
+  dicts: ['sys_yes_no', 'orientation'],
   data() {
     return {
       // 遮罩层

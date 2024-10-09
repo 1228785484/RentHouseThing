@@ -26,11 +26,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="propertyId != null "> and property_id = #{propertyId}</if>
             <if test="orientation != null  and orientation != ''"> and orientation = #{orientation}</if>
-            <if test="hasIndependentBathroom != null "> and has_independent_bathroom = #{hasIndependentBathroom}</if>
-            <if test="hasAirConditioning != null "> and has_air_conditioning = #{hasAirConditioning}</if>
+            <if test="hasIndependentBathroom != null  and hasIndependentBathroom != ''"> and has_independent_bathroom = #{hasIndependentBathroom}</if>
+            <if test="hasAirConditioning != null  and hasAirConditioning != ''"> and has_air_conditioning = #{hasAirConditioning}</if>
             <if test="numberOfBeds != null "> and number_of_beds = #{numberOfBeds}</if>
             <if test="roomStructure != null  and roomStructure != ''"> and room_structure = #{roomStructure}</if>
-            <if test="hasBalcony != null "> and has_balcony = #{hasBalcony}</if>
+            <if test="hasBalcony != null  and hasBalcony != ''"> and has_balcony = #{hasBalcony}</if>
             <if test="furnitureTypes != null  and furnitureTypes != ''"> and furniture_types = #{furnitureTypes}</if>
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
         </where>
