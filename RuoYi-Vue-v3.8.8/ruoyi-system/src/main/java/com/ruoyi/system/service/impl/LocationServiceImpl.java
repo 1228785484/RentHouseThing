@@ -15,10 +15,10 @@ public class LocationServiceImpl implements ILocationService {
     public List<Location> getProvinceList(){
         return locationMapper.getProvinceList();
     }
-    public List<Location> getCityList(int provinceCode){
+    public List<Location> getCityList(Integer provinceCode){
         return locationMapper.getCityList(provinceCode);
     }
-    public List<Location> getAreaList(int cityCode){
+    public List<Location> getAreaList(Integer cityCode){
         return locationMapper.getAreaList(cityCode);
     }
 

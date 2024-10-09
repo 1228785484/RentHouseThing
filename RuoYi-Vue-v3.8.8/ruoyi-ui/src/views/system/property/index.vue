@@ -9,6 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+
       <el-form-item label="地址" prop="address">
         <el-input
           v-model="queryParams.address"
@@ -153,7 +154,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -169,7 +170,7 @@
           <el-input v-model="form.landlordId" placeholder="请输入房东ID" />
         </el-form-item>
         <el-form-item label="地址" prop="address">
-          <el-input v-model="form.address" placeholder="请输入地址" />
+          <LocSelector v-model="form.address" placeholder="请选择地址" />
         </el-form-item>
         <el-form-item label="租金价格" prop="rentPrice">
           <el-input v-model="form.rentPrice" placeholder="请输入租金价格" />
@@ -291,10 +292,13 @@
 </template>
 
 <script>
+import LocSelector from "@/layout/components/Location/LocSelector.vue";
+
 import { listProperty, getProperty, delProperty, addProperty, updateProperty } from "@/api/system/property";
 
 export default {
   name: "Property",
+  components: {LocSelector},
   dicts: ['sys_yes_no', 'sys_normal_disable', 'orientation'],
   data() {
     return {
@@ -420,6 +424,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+
           this.form.propertyattributesList = this.propertyattributesList;
           if (this.form.propertyId != null) {
             updateProperty(this.form).then(response => {
