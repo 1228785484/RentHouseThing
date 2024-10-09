@@ -5,18 +5,18 @@ export function listProvince() {
     method: 'get',
   })
 }
-export function listCity(provinceId) {
+export function listCity(provinceCode) {
   return request({
     url: '/location/city',
     method: 'get',
-    params:{provinceId}
+    params:{ provinceCode }
   })
 }
-export function listArea(cityId) {
+export function listArea(cityCode) {
   return request({
     url: '/location/area',
     method: 'get',
-    params:{cityId}
+    params:{ cityCode }
   })
 }
 
