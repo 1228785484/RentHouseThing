@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 租户信息Controller
  * 
  * @author ruoyi
- * @date 2024-10-02
+ * @date 2024-10-09
  */
 @RestController
 @RequestMapping("/system/tenant")

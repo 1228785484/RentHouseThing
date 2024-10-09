@@ -15,10 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="hasBalcony"    column="has_balcony"    />
         <result property="furnitureTypes"    column="furniture_types"    />
         <result property="createdAt"    column="created_at"    />
+        <result property="roomNumber"    column="room_number"    />
     </resultMap>
 
     <sql id="selectPropertyattributesVo">
-        select attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at from propertyattributes
+        select attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at, room_number from propertyattributes
     </sql>
 
     <select id="selectPropertyattributesList" parameterType="Propertyattributes" resultMap="PropertyattributesResult">
@@ -33,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hasBalcony != null  and hasBalcony != ''"> and has_balcony = #{hasBalcony}</if>
             <if test="furnitureTypes != null  and furnitureTypes != ''"> and furniture_types = #{furnitureTypes}</if>
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="roomNumber != null  and roomNumber != ''"> and room_number = #{roomNumber}</if>
         </where>
     </select>
     
@@ -53,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hasBalcony != null">has_balcony,</if>
             <if test="furnitureTypes != null">furniture_types,</if>
             <if test="createdAt != null">created_at,</if>
+            <if test="roomNumber != null">room_number,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="propertyId != null">#{propertyId},</if>
@@ -64,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hasBalcony != null">#{hasBalcony},</if>
             <if test="furnitureTypes != null">#{furnitureTypes},</if>
             <if test="createdAt != null">#{createdAt},</if>
+            <if test="roomNumber != null">#{roomNumber},</if>
          </trim>
     </insert>
 
@@ -79,6 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="hasBalcony != null">has_balcony = #{hasBalcony},</if>
             <if test="furnitureTypes != null">furniture_types = #{furnitureTypes},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
         </trim>
         where attribute_id = #{attributeId}
     </update>

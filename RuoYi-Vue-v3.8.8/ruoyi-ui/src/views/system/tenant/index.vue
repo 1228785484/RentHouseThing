@@ -33,14 +33,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="看房需求" prop="viewingDemand">
-        <el-input
-          v-model="queryParams.viewingDemand"
-          placeholder="请输入看房需求"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
           v-model="queryParams.createdAt"
@@ -108,7 +100,6 @@
       <el-table-column label="联系电话" align="center" prop="contactNumber" />
       <el-table-column label="邮箱地址" align="center" prop="email" />
       <el-table-column label="身份证号" align="center" prop="identificationNumber" />
-      <el-table-column label="看房需求" align="center" prop="viewingDemand" />
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>
@@ -156,9 +147,6 @@
         </el-form-item>
         <el-form-item label="身份证号" prop="identificationNumber">
           <el-input v-model="form.identificationNumber" placeholder="请输入身份证号" />
-        </el-form-item>
-        <el-form-item label="看房需求" prop="viewingDemand">
-          <el-input v-model="form.viewingDemand" placeholder="请输入看房需求" />
         </el-form-item>
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
@@ -210,7 +198,6 @@ export default {
         contactNumber: null,
         email: null,
         identificationNumber: null,
-        viewingDemand: null,
         createdAt: null
       },
       // 表单参数
@@ -252,7 +239,6 @@ export default {
         contactNumber: null,
         email: null,
         identificationNumber: null,
-        viewingDemand: null,
         createdAt: null
       };
       this.resetForm("form");

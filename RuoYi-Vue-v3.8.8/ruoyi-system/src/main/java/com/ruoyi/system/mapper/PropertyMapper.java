@@ -2,12 +2,13 @@ package com.ruoyi.system.mapper;
 
 import java.util.List;
 import com.ruoyi.system.domain.Property;
+import com.ruoyi.system.domain.Propertyattributes;
 
 /**
  * 房源信息Mapper接口
  * 
  * @author ruoyi
- * @date 2024-10-07
+ * @date 2024-10-09
  */
 public interface PropertyMapper 
 {
@@ -58,4 +59,29 @@ public interface PropertyMapper
      * @return 结果
      */
     public int deletePropertyByPropertyIds(Long[] propertyIds);
+
+    /**
+     * 批量删除房源属性信息
+     * 
+     * @param propertyIds 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deletePropertyattributesByPropertyIds(Long[] propertyIds);
+    
+    /**
+     * 批量新增房源属性信息
+     * 
+     * @param propertyattributesList 房源属性信息列表
+     * @return 结果
+     */
+    public int batchPropertyattributes(List<Propertyattributes> propertyattributesList);
+    
+
+    /**
+     * 通过房源信息主键删除房源属性信息信息
+     * 
+     * @param propertyId 房源信息ID
+     * @return 结果
+     */
+    public int deletePropertyattributesByPropertyId(Long propertyId);
 }

@@ -1,6 +1,7 @@
 package com.ruoyi.system.domain;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,7 +13,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 房源信息对象 property
  * 
  * @author ruoyi
- * @date 2024-10-07
+ * @date 2024-10-09
  */
 public class Property extends BaseEntity
 {
@@ -49,6 +50,13 @@ public class Property extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date createdAt;
+
+    /** 房源名字 */
+    @Excel(name = "房源名字")
+    private String propertyName;
+
+    /** 房源属性信息信息 */
+    private List<Propertyattributes> propertyattributesList;
 
     public void setPropertyId(Long propertyId) 
     {
@@ -122,6 +130,25 @@ public class Property extends BaseEntity
     {
         return createdAt;
     }
+    public void setPropertyName(String propertyName) 
+    {
+        this.propertyName = propertyName;
+    }
+
+    public String getPropertyName() 
+    {
+        return propertyName;
+    }
+
+    public List<Propertyattributes> getPropertyattributesList()
+    {
+        return propertyattributesList;
+    }
+
+    public void setPropertyattributesList(List<Propertyattributes> propertyattributesList)
+    {
+        this.propertyattributesList = propertyattributesList;
+    }
 
     @Override
     public String toString() {
@@ -134,6 +161,8 @@ public class Property extends BaseEntity
             .append("available", getAvailable())
             .append("imageUrl", getImageUrl())
             .append("createdAt", getCreatedAt())
+            .append("propertyName", getPropertyName())
+            .append("propertyattributesList", getPropertyattributesList())
             .toString();
     }
 }

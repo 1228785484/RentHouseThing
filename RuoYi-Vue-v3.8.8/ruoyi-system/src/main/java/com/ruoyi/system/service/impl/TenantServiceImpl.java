@@ -11,7 +11,7 @@ import com.ruoyi.system.service.ITenantService;
  * 租户信息Service业务层处理
  * 
  * @author ruoyi
- * @date 2024-10-02
+ * @date 2024-10-09
  */
 @Service
 public class TenantServiceImpl implements ITenantService 

@@ -10,12 +10,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="contactNumber"    column="contact_number"    />
         <result property="email"    column="email"    />
         <result property="identificationNumber"    column="identification_number"    />
-        <result property="viewingDemand"    column="viewing_demand"    />
         <result property="createdAt"    column="created_at"    />
     </resultMap>
 
     <sql id="selectTenantVo">
-        select tenant_id, name, contact_number, email, identification_number, viewing_demand, created_at from tenant
+        select tenant_id, name, contact_number, email, identification_number, created_at from tenant
     </sql>
 
     <select id="selectTenantList" parameterType="Tenant" resultMap="TenantResult">
@@ -25,7 +24,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactNumber != null  and contactNumber != ''"> and contact_number = #{contactNumber}</if>
             <if test="email != null  and email != ''"> and email = #{email}</if>
             <if test="identificationNumber != null  and identificationNumber != ''"> and identification_number = #{identificationNumber}</if>
-            <if test="viewingDemand != null "> and viewing_demand = #{viewingDemand}</if>
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
         </where>
     </select>
@@ -42,7 +40,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactNumber != null and contactNumber != ''">contact_number,</if>
             <if test="email != null">email,</if>
             <if test="identificationNumber != null">identification_number,</if>
-            <if test="viewingDemand != null">viewing_demand,</if>
             <if test="createdAt != null">created_at,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -50,7 +47,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactNumber != null and contactNumber != ''">#{contactNumber},</if>
             <if test="email != null">#{email},</if>
             <if test="identificationNumber != null">#{identificationNumber},</if>
-            <if test="viewingDemand != null">#{viewingDemand},</if>
             <if test="createdAt != null">#{createdAt},</if>
          </trim>
     </insert>
@@ -62,7 +58,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactNumber != null and contactNumber != ''">contact_number = #{contactNumber},</if>
             <if test="email != null">email = #{email},</if>
             <if test="identificationNumber != null">identification_number = #{identificationNumber},</if>
-            <if test="viewingDemand != null">viewing_demand = #{viewingDemand},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
         </trim>
         where tenant_id = #{tenantId}

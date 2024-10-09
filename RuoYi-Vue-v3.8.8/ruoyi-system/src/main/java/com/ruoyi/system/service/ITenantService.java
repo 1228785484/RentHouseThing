@@ -7,7 +7,7 @@ import com.ruoyi.system.domain.Tenant;
  * 租户信息Service接口
  * 
  * @author ruoyi
- * @date 2024-10-02
+ * @date 2024-10-09
  */
 public interface ITenantService 
 {

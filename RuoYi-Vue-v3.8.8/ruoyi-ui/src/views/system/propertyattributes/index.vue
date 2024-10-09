@@ -73,6 +73,14 @@
           placeholder="请选择创建时间">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="房间号" prop="roomNumber">
+        <el-input
+          v-model="queryParams.roomNumber"
+          placeholder="请输入房间号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -157,6 +165,7 @@
           <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="房间号" align="center" prop="roomNumber" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -245,6 +254,9 @@
             placeholder="请选择创建时间">
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="房间号" prop="roomNumber">
+          <el-input v-model="form.roomNumber" placeholder="请输入房间号" />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -292,7 +304,8 @@ export default {
         roomStructure: null,
         hasBalcony: null,
         furnitureTypes: null,
-        createdAt: null
+        createdAt: null,
+        roomNumber: null
       },
       // 表单参数
       form: {},
@@ -334,7 +347,8 @@ export default {
         roomStructure: null,
         hasBalcony: null,
         furnitureTypes: null,
-        createdAt: null
+        createdAt: null,
+        roomNumber: null
       };
       this.resetForm("form");
     },

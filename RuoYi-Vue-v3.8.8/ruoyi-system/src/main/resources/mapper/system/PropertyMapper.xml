@@ -13,10 +13,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="available"    column="available"    />
         <result property="imageUrl"    column="image_url"    />
         <result property="createdAt"    column="created_at"    />
+        <result property="propertyName"    column="property_name"    />
+    </resultMap>
+
+    <resultMap id="PropertyPropertyattributesResult" type="Property" extends="PropertyResult">
+        <collection property="propertyattributesList" ofType="Propertyattributes" column="property_id" select="selectPropertyattributesList" />
+    </resultMap>
+
+    <resultMap type="Propertyattributes" id="PropertyattributesResult">
+        <result property="attributeId"    column="attribute_id"    />
+        <result property="propertyId"    column="property_id"    />
+        <result property="orientation"    column="orientation"    />
+        <result property="hasIndependentBathroom"    column="has_independent_bathroom"    />
+        <result property="hasAirConditioning"    column="has_air_conditioning"    />
+        <result property="numberOfBeds"    column="number_of_beds"    />
+        <result property="roomStructure"    column="room_structure"    />
+        <result property="hasBalcony"    column="has_balcony"    />
+        <result property="furnitureTypes"    column="furniture_types"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="roomNumber"    column="room_number"    />
     </resultMap>
 
     <sql id="selectPropertyVo">
-        select property_id, landlord_id, address, rent_price, deposit, available, image_url, created_at from property
+        select property_id, landlord_id, address, rent_price, deposit, available, image_url, created_at, property_name from property
     </sql>
 
     <select id="selectPropertyList" parameterType="Property" resultMap="PropertyResult">
@@ -29,12 +48,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="available != null  and available != ''"> and available = #{available}</if>
             <if test="imageUrl != null  and imageUrl != ''"> and image_url = #{imageUrl}</if>
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="propertyName != null  and propertyName != ''"> and property_name like concat('%', #{propertyName}, '%')</if>
         </where>
     </select>
     
-    <select id="selectPropertyByPropertyId" parameterType="Long" resultMap="PropertyResult">
-        <include refid="selectPropertyVo"/>
+    <select id="selectPropertyByPropertyId" parameterType="Long" resultMap="PropertyPropertyattributesResult">
+        select property_id, landlord_id, address, rent_price, deposit, available, image_url, created_at, property_name
+        from property
         where property_id = #{propertyId}
+    </select>
+
+    <select id="selectPropertyattributesList" resultType="Propertyattributes" resultMap="PropertyattributesResult">
+        select attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at, room_number
+        from propertyattributes
+        where property_id = #{property_id}
     </select>
 
     <insert id="insertProperty" parameterType="Property" useGeneratedKeys="true" keyProperty="propertyId">
@@ -47,6 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="available != null">available,</if>
             <if test="imageUrl != null">image_url,</if>
             <if test="createdAt != null">created_at,</if>
+            <if test="propertyName != null and propertyName != ''">property_name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="landlordId != null">#{landlordId},</if>
@@ -56,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="available != null">#{available},</if>
             <if test="imageUrl != null">#{imageUrl},</if>
             <if test="createdAt != null">#{createdAt},</if>
+            <if test="propertyName != null and propertyName != ''">#{propertyName},</if>
          </trim>
     </insert>
 
@@ -69,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="available != null">available = #{available},</if>
             <if test="imageUrl != null">image_url = #{imageUrl},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="propertyName != null and propertyName != ''">property_name = #{propertyName},</if>
         </trim>
         where property_id = #{propertyId}
     </update>
@@ -83,4 +113,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{propertyId}
         </foreach>
     </delete>
+    
+    <delete id="deletePropertyattributesByPropertyIds" parameterType="String">
+        delete from propertyattributes where property_id in 
+        <foreach item="propertyId" collection="array" open="(" separator="," close=")">
+            #{propertyId}
+        </foreach>
+    </delete>
+
+    <delete id="deletePropertyattributesByPropertyId" parameterType="Long">
+        delete from propertyattributes where property_id = #{propertyId}
+    </delete>
+
+    <insert id="batchPropertyattributes">
+        insert into propertyattributes( attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at, room_number) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.attributeId}, #{item.propertyId}, #{item.orientation}, #{item.hasIndependentBathroom}, #{item.hasAirConditioning}, #{item.numberOfBeds}, #{item.roomStructure}, #{item.hasBalcony}, #{item.furnitureTypes}, #{item.createdAt}, #{item.roomNumber})
+        </foreach>
+    </insert>
 </mapper>

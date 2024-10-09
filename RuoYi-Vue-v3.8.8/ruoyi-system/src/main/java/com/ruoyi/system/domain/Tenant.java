@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 租户信息对象 tenant
  * 
  * @author ruoyi
- * @date 2024-10-02
+ * @date 2024-10-09
  */
 public class Tenant extends BaseEntity
 {
@@ -35,10 +35,6 @@ public class Tenant extends BaseEntity
     /** 身份证号 */
     @Excel(name = "身份证号")
     private String identificationNumber;
-
-    /** 看房需求 */
-    @Excel(name = "看房需求")
-    private Integer viewingDemand;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -90,15 +86,6 @@ public class Tenant extends BaseEntity
     {
         return identificationNumber;
     }
-    public void setViewingDemand(Integer viewingDemand) 
-    {
-        this.viewingDemand = viewingDemand;
-    }
-
-    public Integer getViewingDemand() 
-    {
-        return viewingDemand;
-    }
     public void setCreatedAt(Date createdAt) 
     {
         this.createdAt = createdAt;
@@ -117,7 +104,6 @@ public class Tenant extends BaseEntity
             .append("contactNumber", getContactNumber())
             .append("email", getEmail())
             .append("identificationNumber", getIdentificationNumber())
-            .append("viewingDemand", getViewingDemand())
             .append("createdAt", getCreatedAt())
             .toString();
     }
