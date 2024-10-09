@@ -4,6 +4,7 @@
     <option name="projectProfile">
       <ProjectProfile>
         <option name="database" value="MySql" />
+        <option name="typeAliasPackages" value="com.ruoyi.system.domain;com.ruoyi.generator.domain;com.ruoyi.quartz.domain;com.ruoyi.framework.web.domain;com.ruoyi.common.core.domain" />
       </ProjectProfile>
     </option>
   </component>

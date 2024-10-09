@@ -1,0 +1,12 @@
+1.添加地区自动输入功能
+
+2.添加根据租金的范围进行搜索的功能
+
+实体类:
+RuoYi-Vue-v3.8.8/ruoyi-system/src/main/java/com/ruoyi/system/domain
+Mapper(XML):
+RuoYi-Vue-v3.8.8/ruoyi-system/src/main/resources/mapper/system
+Mapper(Java):
+RuoYi-Vue-v3.8.8/ruoyi-system/src/main/java/com/ruoyi/system/mapper
+Service+Impl:
+RuoYi-Vue-v3.8.8/ruoyi-system/src/main/java/com/ruoyi/system/service
