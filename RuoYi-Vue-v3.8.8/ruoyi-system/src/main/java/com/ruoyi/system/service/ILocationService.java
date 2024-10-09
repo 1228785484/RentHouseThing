@@ -8,6 +8,6 @@ import java.util.Locale;
 
 public interface ILocationService {
     List<Location> getProvinceList();
-    List<Location> getCityList(Integer provinceCode);
-    List<Location> getAreaList(Integer cityCode);
+    List<Location> getCityList(Long provinceCode);
+    List<Location> getAreaList(Long cityCode);
 }

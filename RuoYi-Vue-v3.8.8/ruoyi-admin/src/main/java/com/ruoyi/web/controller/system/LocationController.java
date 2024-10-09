@@ -24,13 +24,13 @@ public class LocationController {
     }
     @GetMapping("/city")
     //这边必须要包装好的参数，不能用int，因为int不能为null
-    public AjaxResult getCityFromProvince(Integer provinceCode){
+    public AjaxResult getCityFromProvince(Long provinceCode){
         List<Location> LocList = locationService.getCityList(provinceCode);
         AjaxResult res = AjaxResult.success(LocList);
         return res.put("data",LocList);
     }
     @GetMapping("/area")
-    public AjaxResult getAreaFromCity(Integer cityCode){
+    public AjaxResult getAreaFromCity(Long cityCode){
         List<Location> LocList = locationService.getAreaList(cityCode);
         AjaxResult res = AjaxResult.success(LocList);
         return res.put("data",LocList);
