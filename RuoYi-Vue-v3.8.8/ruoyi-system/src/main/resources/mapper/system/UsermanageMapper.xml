@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UsermanageMapper">
+    
+    <resultMap type="Usermanage" id="UsermanageResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userType"    column="user_type"    />
+        <result property="username"    column="username"    />
+        <result property="password"    column="password"    />
+        <result property="name"    column="name"    />
+        <result property="contactNumber"    column="contact_number"    />
+        <result property="email"    column="email"    />
+        <result property="identificationNumber"    column="identification_number"    />
+        <result property="tenantId"    column="tenant_id"    />
+        <result property="landlordId"    column="landlord_id"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectUsermanageVo">
+        select user_id, user_type, username, password, name, contact_number, email, identification_number, tenant_id, landlord_id, created_at from usermanage
+    </sql>
+
+    <select id="selectUsermanageList" parameterType="Usermanage" resultMap="UsermanageResult">
+        <include refid="selectUsermanageVo"/>
+        <where>  
+            <if test="userType != null  and userType != ''"> and user_type = #{userType}</if>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="contactNumber != null  and contactNumber != ''"> and contact_number = #{contactNumber}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="identificationNumber != null  and identificationNumber != ''"> and identification_number = #{identificationNumber}</if>
+            <if test="tenantId != null "> and tenant_id = #{tenantId}</if>
+            <if test="landlordId != null "> and landlord_id = #{landlordId}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectUsermanageByUserId" parameterType="Long" resultMap="UsermanageResult">
+        <include refid="selectUsermanageVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertUsermanage" parameterType="Usermanage" useGeneratedKeys="true" keyProperty="userId">
+        insert into usermanage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userType != null and userType != ''">user_type,</if>
+            <if test="username != null and username != ''">username,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="contactNumber != null and contactNumber != ''">contact_number,</if>
+            <if test="email != null">email,</if>
+            <if test="identificationNumber != null">identification_number,</if>
+            <if test="tenantId != null">tenant_id,</if>
+            <if test="landlordId != null">landlord_id,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userType != null and userType != ''">#{userType},</if>
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="contactNumber != null and contactNumber != ''">#{contactNumber},</if>
+            <if test="email != null">#{email},</if>
+            <if test="identificationNumber != null">#{identificationNumber},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+            <if test="landlordId != null">#{landlordId},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUsermanage" parameterType="Usermanage">
+        update usermanage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userType != null and userType != ''">user_type = #{userType},</if>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="contactNumber != null and contactNumber != ''">contact_number = #{contactNumber},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="identificationNumber != null">identification_number = #{identificationNumber},</if>
+            <if test="tenantId != null">tenant_id = #{tenantId},</if>
+            <if test="landlordId != null">landlord_id = #{landlordId},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteUsermanageByUserId" parameterType="Long">
+        delete from usermanage where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUsermanageByUserIds" parameterType="String">
+        delete from usermanage where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+</mapper>

@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 房源属性信息对象 propertyattributes
  * 
  * @author ruoyi
- * @date 2024-10-07
+ * @date 2024-10-09
  */
 public class Propertyattributes extends BaseEntity
 {
