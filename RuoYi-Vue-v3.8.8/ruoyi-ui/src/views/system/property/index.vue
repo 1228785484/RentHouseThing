@@ -425,6 +425,15 @@ export default {
       const propertyId = row.propertyId || this.ids;
       getProperty(propertyId).then(response => {
         this.form = response.data;
+        // 分离地址和详细地址
+        if (this.form.address) {
+          const addressParts = this.form.address.split(',');
+          if (addressParts.length > 3) {
+            this.form.address = addressParts.slice(0, 3);
+            this.form.detailAddress = addressParts.slice(3).join(',');
+          }
+        }
+
         this.propertyattributesList = response.data.propertyattributesList;
         this.open = true;
         this.title = "修改房源信息";

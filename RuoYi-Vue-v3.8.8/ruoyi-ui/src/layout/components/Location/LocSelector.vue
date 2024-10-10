@@ -15,7 +15,7 @@ export default {
   name: "LocSelector",
   props: {
     value: {
-      type: Array,
+      type: [Array,String],
       default: () => []
     }
   },
@@ -37,9 +37,14 @@ export default {
     value: {
       immediate: true,
       handler(newVal) {
-        if (newVal !== this.getLabels(this.selectLocation)) {
+        if (typeof newVal === 'string') {
           this.setLocationFromLabels(newVal);
+        } else if (Array.isArray(newVal)) {
+          this.selectLocation = newVal;
         }
+        // if (newVal !== this.getLabels(this.selectLocation)) {
+        //   this.setLocationFromLabels(newVal);
+        // }
       }
     }
   },

@@ -1,6 +1,13 @@
 1.添加地区自动输入功能
-
+ADDED
 2.添加根据租金的范围进行搜索的功能
+ADDED
+3.根据省市区查询房源
+
+4.2里面有bug，可以把最小租金设置的大于最大租金
+
+5.
+
 
 实体类:
 RuoYi-Vue-v3.8.8/ruoyi-system/src/main/java/com/ruoyi/system/domain
