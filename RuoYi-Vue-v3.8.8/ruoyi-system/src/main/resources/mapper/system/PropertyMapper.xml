@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.PropertyMapper">
-    
+
     <resultMap type="Property" id="PropertyResult">
         <result property="propertyId"    column="property_id"    />
         <result property="landlordId"    column="landlord_id"    />
@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectPropertyList" parameterType="Property" resultMap="PropertyResult">
         <include refid="selectPropertyVo"/>
-        <where>  
+        <where>
             <if test="landlordId != null "> and landlord_id = #{landlordId}</if>
             <if test="address != null  and address != ''"> and address = #{address}</if>
             <if test="rentPrice != null "> and rent_price = #{rentPrice}</if>
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="propertyName != null  and propertyName != ''"> and property_name like concat('%', #{propertyName}, '%')</if>
         </where>
     </select>
-    
+
     <select id="selectPropertyByPropertyId" parameterType="Long" resultMap="PropertyPropertyattributesResult">
         select property_id, landlord_id, address, rent_price, deposit, available, image_url, created_at, property_name
         from property
@@ -108,14 +108,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deletePropertyByPropertyIds" parameterType="String">
-        delete from property where property_id in 
+        delete from property where property_id in
         <foreach item="propertyId" collection="array" open="(" separator="," close=")">
             #{propertyId}
         </foreach>
     </delete>
-    
+
     <delete id="deletePropertyattributesByPropertyIds" parameterType="String">
-        delete from propertyattributes where property_id in 
+        delete from propertyattributes where property_id in
         <foreach item="propertyId" collection="array" open="(" separator="," close=")">
             #{propertyId}
         </foreach>
