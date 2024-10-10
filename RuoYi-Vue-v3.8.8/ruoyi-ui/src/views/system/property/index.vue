@@ -176,7 +176,8 @@
           <el-input v-model="form.landlordId" placeholder="请输入房东ID" />
         </el-form-item>
         <el-form-item label="地址" prop="address">
-          <el-input v-model="form.address" placeholder="请输入地址" />
+          <LocSelector v-model="form.address" placeholder="请选择地址" />
+          <el-input v-model="form.detailAddress" placeholder="请输入详细地址" />
         </el-form-item>
         <el-form-item label="租金价格" prop="rentPrice">
           <el-input v-model="form.rentPrice" placeholder="请输入租金价格" />
@@ -299,9 +300,12 @@
 <script>
 import { listProperty, getProperty, delProperty, addProperty, updateProperty } from "@/api/system/property";
 import { listPropertyByRentRange } from '@/api/system/property'; // 新增的引入
+import LocSelector from "@/layout/components/Location/LocSelector.vue";
+
 
 export default {
   name: "Property",
+  components: {LocSelector},
   dicts: ['sys_yes_no', 'sys_normal_disable', 'orientation'],
   data() {
     return {
@@ -333,6 +337,7 @@ export default {
         pageSize: 10,
         landlordId: null,
         address: null,
+        detailAddress: null, // 新增
         rentPrice: null,
         deposit: null,
         available: null,
@@ -429,6 +434,9 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          if (this.form.address && this.form.detailAddress) {
+            this.form.address = this.form.address +',' + this.form.detailAddress;
+          }
           this.form.propertyattributesList = this.propertyattributesList;
           if (this.form.propertyId != null) {
             updateProperty(this.form).then(response => {
