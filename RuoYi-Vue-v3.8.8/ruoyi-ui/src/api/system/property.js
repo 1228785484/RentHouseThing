@@ -1,5 +1,16 @@
 import request from '@/utils/request'
 
+// 查询租金范围的房源信息
+export function listPropertyByRentRange(minRent, maxRent) {
+  return request({
+    url: '/system/property/rent-range',
+    method: 'get',
+    params: { minRent, maxRent },
+
+  });
+}
+
+
 // 查询房源信息列表
 export function listProperty(query) {
   return request({

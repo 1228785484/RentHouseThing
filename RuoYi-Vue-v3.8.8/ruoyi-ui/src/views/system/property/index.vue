@@ -9,7 +9,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-
       <el-form-item label="地址" prop="address">
         <el-input
           v-model="queryParams.address"
@@ -26,6 +25,13 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+
+      <el-form-item label="租金范围" prop="rentRange">
+        <el-input-number v-model="queryParams.minRent" placeholder="最小租金" />
+        <el-input-number v-model="queryParams.maxRent" placeholder="最大租金" />
+        <el-button @click="handleRentRangeQuery">查询</el-button>
+      </el-form-item>
+
       <el-form-item label="押金" prop="deposit">
         <el-input
           v-model="queryParams.deposit"
@@ -170,7 +176,7 @@
           <el-input v-model="form.landlordId" placeholder="请输入房东ID" />
         </el-form-item>
         <el-form-item label="地址" prop="address">
-          <LocSelector v-model="form.address" placeholder="请选择地址" />
+          <el-input v-model="form.address" placeholder="请输入地址" />
         </el-form-item>
         <el-form-item label="租金价格" prop="rentPrice">
           <el-input v-model="form.rentPrice" placeholder="请输入租金价格" />
@@ -290,15 +296,12 @@
     </el-dialog>
   </div>
 </template>
-
 <script>
-import LocSelector from "@/layout/components/Location/LocSelector.vue";
-
 import { listProperty, getProperty, delProperty, addProperty, updateProperty } from "@/api/system/property";
+import { listPropertyByRentRange } from '@/api/system/property'; // 新增的引入
 
 export default {
   name: "Property",
-  components: {LocSelector},
   dicts: ['sys_yes_no', 'sys_normal_disable', 'orientation'],
   data() {
     return {
@@ -335,7 +338,9 @@ export default {
         available: null,
         imageUrl: null,
         createdAt: null,
-        propertyName: null
+        propertyName: null,
+        minRent: null,  // 新增
+        maxRent: null   // 新增
       },
       // 表单参数
       form: {},
@@ -399,9 +404,9 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.propertyId)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+      this.ids = selection.map(item => item.propertyId);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -412,7 +417,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const propertyId = row.propertyId || this.ids
+      const propertyId = row.propertyId || this.ids;
       getProperty(propertyId).then(response => {
         this.form = response.data;
         this.propertyattributesList = response.data.propertyattributesList;
@@ -424,7 +429,6 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-
           this.form.propertyattributesList = this.propertyattributesList;
           if (this.form.propertyId != null) {
             updateProperty(this.form).then(response => {
@@ -452,7 +456,7 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
-	/** 房源属性信息序号 */
+    /** 房源属性信息序号 */
     rowPropertyattributesIndex({ row, rowIndex }) {
       row.index = rowIndex + 1;
     },
@@ -478,19 +482,28 @@ export default {
         const propertyattributesList = this.propertyattributesList;
         const checkedPropertyattributes = this.checkedPropertyattributes;
         this.propertyattributesList = propertyattributesList.filter(function(item) {
-          return checkedPropertyattributes.indexOf(item.index) == -1
+          return checkedPropertyattributes.indexOf(item.index) == -1;
         });
       }
     },
     /** 复选框选中数据 */
     handlePropertyattributesSelectionChange(selection) {
-      this.checkedPropertyattributes = selection.map(item => item.index)
+      this.checkedPropertyattributes = selection.map(item => item.index);
     },
     /** 导出按钮操作 */
     handleExport() {
       this.download('system/property/export', {
         ...this.queryParams
-      }, `property_${new Date().getTime()}.xlsx`)
+      }, `property_${new Date().getTime()}.xlsx`);
+    },
+    /** 租金范围查询操作 */
+    handleRentRangeQuery() {
+      this.loading = true;
+      listPropertyByRentRange(this.queryParams.minRent, this.queryParams.maxRent).then(response => {
+        this.propertyList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
     }
   }
 };
