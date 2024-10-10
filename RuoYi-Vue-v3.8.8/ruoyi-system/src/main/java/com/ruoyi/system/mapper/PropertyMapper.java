@@ -1,8 +1,11 @@
 package com.ruoyi.system.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.ruoyi.system.domain.Property;
 import com.ruoyi.system.domain.Propertyattributes;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 房源信息Mapper接口
@@ -10,8 +13,12 @@ import com.ruoyi.system.domain.Propertyattributes;
  * @author ruoyi
  * @date 2024-10-09
  */
+@Mapper
 public interface PropertyMapper 
 {
+
+
+
     /**
      * 查询房源信息
      * 
@@ -84,4 +91,8 @@ public interface PropertyMapper
      * @return 结果
      */
     public int deletePropertyattributesByPropertyId(Long propertyId);
+
+
+    public List<Property> findPropertiesByRentRange(@Param("minRent") BigDecimal minRent,
+                                                    @Param("maxRent") BigDecimal maxRent);
 }

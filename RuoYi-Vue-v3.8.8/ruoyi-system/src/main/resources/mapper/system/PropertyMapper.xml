@@ -38,6 +38,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select property_id, landlord_id, address, rent_price, deposit, available, image_url, created_at, property_name from property
     </sql>
 
+    <select id="findPropertiesByRentRange" resultMap="PropertyResult">
+        SELECT * FROM property
+        WHERE rent_price BETWEEN #{minRent} AND #{maxRent}
+    </select>
+
+
     <select id="selectPropertyList" parameterType="Property" resultMap="PropertyResult">
         <include refid="selectPropertyVo"/>
         <where>  

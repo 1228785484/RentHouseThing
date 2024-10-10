@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,20 @@ public class PropertyServiceImpl implements IPropertyService
 {
     @Autowired
     private PropertyMapper propertyMapper;
+
+
+    @Override
+    public List<Property> findPropertiesByRentRange(BigDecimal minRent, BigDecimal maxRent) {
+        System.out.println("Min Rent: " + minRent);
+        System.out.println("Max Rent: " + maxRent);
+
+        // 检查输入的值
+        if (minRent == null || maxRent == null) {
+            throw new IllegalArgumentException("Rent range parameters cannot be null.");
+        }
+        return propertyMapper.findPropertiesByRentRange(minRent, maxRent);
+    }
+
 
     /**
      * 查询房源信息

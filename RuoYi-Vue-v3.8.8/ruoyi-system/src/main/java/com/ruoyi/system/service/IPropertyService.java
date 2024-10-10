@@ -1,7 +1,9 @@
 package com.ruoyi.system.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.ruoyi.system.domain.Property;
+import io.lettuce.core.dynamic.annotation.Param;
 
 /**
  * 房源信息Service接口
@@ -11,6 +13,10 @@ import com.ruoyi.system.domain.Property;
  */
 public interface IPropertyService 
 {
+    public List<Property> findPropertiesByRentRange(@Param("minRent") BigDecimal minRent, @Param("maxRent") BigDecimal maxRent);
+
+
+
     /**
      * 查询房源信息
      * 
