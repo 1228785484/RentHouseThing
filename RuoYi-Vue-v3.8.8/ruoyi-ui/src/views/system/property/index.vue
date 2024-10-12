@@ -30,13 +30,14 @@
         <el-input-number
           v-model="queryParams.minRent"
           placeholder="最小租金"
+          :min="0"
           :max="queryParams.maxRent || Infinity"
           @change="validateRentRange"
         />
         <el-input-number
           v-model="queryParams.maxRent"
           placeholder="最大租金"
-          :min="queryParams.minRent || 0"
+          :min="Math.max(queryParams.minRent || 0, 0)"
           @change="validateRentRange"
         />
         <el-button @click="handleRentRangeQuery" :disabled="!isValidRentRange">查询</el-button>
@@ -370,8 +371,7 @@ export default {
         propertyName: [
           { required: true, message: "房源名字不能为空", trigger: "blur" }
         ]
-      },
-      isValidRentRange: false,
+      }
     };
   },
   created() {
@@ -534,16 +534,23 @@ export default {
           this.loading = false;
         });
       } else {
-        this.$message.warning('请输入有效的租金范围');
+        this.$message.warning('请输入有效的租金范围（最小租金不能小于0，且不能大于最大租金）');
       }
     },
     validateRentRange() {
-      if (this.queryParams.minRent && this.queryParams.maxRent) {
-        this.isValidRentRange = this.queryParams.minRent <= this.queryParams.maxRent;
+      const minRent = this.queryParams.minRent;
+      const maxRent = this.queryParams.maxRent;
+
+      if (minRent !== null && minRent !== undefined && maxRent !== null && maxRent !== undefined) {
+        this.isValidRentRange = minRent >= 0 && minRent <= maxRent;
+      } else if (minRent !== null && minRent !== undefined) {
+        this.isValidRentRange = minRent >= 0;
+      } else if (maxRent !== null && maxRent !== undefined) {
+        this.isValidRentRange = maxRent >= 0;
       } else {
         this.isValidRentRange = false;
       }
-    },
+    }
   }
 };
 </script>
