@@ -1,6 +1,8 @@
 package com.ruoyi.system.domain;
 
-public class Location {
+import com.ruoyi.common.core.domain.BaseEntity;
+
+public class Location extends BaseEntity {
     public int getLevel() {
         return level;
     }
