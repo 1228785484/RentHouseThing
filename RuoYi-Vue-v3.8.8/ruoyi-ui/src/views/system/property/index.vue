@@ -40,7 +40,6 @@
           :min="queryParams.minRent || 0"
           @change="validateRentRange"
         />
-        <el-button @click="handleRentRangeQuery" :disabled="!isValidRentRange">查询</el-button>
       </el-form-item>
 
       <el-form-item label="押金" prop="deposit">
@@ -412,7 +411,21 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
-      this.getList();
+      if (this.queryParams.minRent !== null && this.queryParams.maxRent !== null) {
+        if (this.isValidRentRange) {
+          this.loading = true;
+          listPropertyByRentRange(this.queryParams.minRent, this.queryParams.maxRent).then(response => {
+            this.propertyList = response.rows;
+            this.total = response.total;
+            this.loading = false;
+          });
+        } else {
+          this.$message.error('请输入有效的租金范围');
+          return;
+        }
+      } else {
+        this.getList();
+      }
     },
     /** 重置按钮操作 */
     resetQuery() {
@@ -524,19 +537,6 @@ export default {
       this.download('system/property/export', {
         ...this.queryParams
       }, `property_${new Date().getTime()}.xlsx`);
-    },
-    /** 租金范围查询操作 */
-    handleRentRangeQuery() {
-      if (this.isValidRentRange) {
-        this.loading = true;
-        listPropertyByRentRange(this.queryParams.minRent, this.queryParams.maxRent).then(response => {
-          this.propertyList = response.rows;
-          this.total = response.total;
-          this.loading = false;
-        });
-      } else {
-        this.$message.error('请输入有效的租金范围');
-      }
     },
     validateRentRange() {
       const {minRent, maxRent} = this.queryParams;
