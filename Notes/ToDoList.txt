@@ -6,8 +6,8 @@ ADDED
 
 4.2里面有bug，可以把最小租金设置的大于最大租金
 
-5.
-
+5.我写的bug我也不知道什么情况,反正要修，大概
+111111
 
 实体类:
 RuoYi-Vue-v3.8.8/ruoyi-system/src/main/java/com/ruoyi/system/domain
