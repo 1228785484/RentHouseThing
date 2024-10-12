@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectPropertyVo"/>
         <where>  
             <if test="landlordId != null "> and landlord_id = #{landlordId}</if>
-            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="address != null  and address != ''"> and address like concat('%', #{address}, '%')</if>
             <if test="rentPrice != null "> and rent_price = #{rentPrice}</if>
             <if test="deposit != null "> and deposit = #{deposit}</if>
             <if test="available != null  and available != ''"> and available = #{available}</if>
