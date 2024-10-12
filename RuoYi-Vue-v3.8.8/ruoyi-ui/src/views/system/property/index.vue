@@ -27,9 +27,20 @@
       </el-form-item>
 
       <el-form-item label="租金范围" prop="rentRange">
-        <el-input-number v-model="queryParams.minRent" placeholder="最小租金" />
-        <el-input-number v-model="queryParams.maxRent" placeholder="最大租金" />
-        <el-button @click="handleRentRangeQuery">查询</el-button>
+        <el-input-number
+          v-model="queryParams.minRent"
+          placeholder="最小租金"
+          :min="0"
+          :max="queryParams.maxRent || Infinity"
+          @change="validateRentRange"
+        />
+        <el-input-number
+          v-model="queryParams.maxRent"
+          placeholder="最大租金"
+          :min="Math.max(queryParams.minRent || 0, 0)"
+          @change="validateRentRange"
+        />
+        <el-button @click="handleRentRangeQuery" :disabled="!isValidRentRange">查询</el-button>
       </el-form-item>
 
       <el-form-item label="押金" prop="deposit">
@@ -52,10 +63,10 @@
       </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
-          v-model="queryParams.createdAt"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择创建时间">
+                        v-model="queryParams.createdAt"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="请选择创建时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="房源名字" prop="propertyName">
@@ -199,10 +210,10 @@
         </el-form-item>
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
-            v-model="form.createdAt"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择创建时间">
+                          v-model="form.createdAt"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="请选择创建时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="房源名字" prop="propertyName">
@@ -515,12 +526,30 @@ export default {
     },
     /** 租金范围查询操作 */
     handleRentRangeQuery() {
-      this.loading = true;
-      listPropertyByRentRange(this.queryParams.minRent, this.queryParams.maxRent).then(response => {
-        this.propertyList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      if (this.isValidRentRange) {
+        this.loading = true;
+        listPropertyByRentRange(this.queryParams.minRent, this.queryParams.maxRent).then(response => {
+          this.propertyList = response.rows;
+          this.total = response.total;
+          this.loading = false;
+        });
+      } else {
+        this.$message.warning('请输入有效的租金范围（最小租金不能小于0，且不能大于最大租金）');
+      }
+    },
+    validateRentRange() {
+      const minRent = this.queryParams.minRent;
+      const maxRent = this.queryParams.maxRent;
+
+      if (minRent !== null && minRent !== undefined && maxRent !== null && maxRent !== undefined) {
+        this.isValidRentRange = minRent >= 0 && minRent <= maxRent;
+      } else if (minRent !== null && minRent !== undefined) {
+        this.isValidRentRange = minRent >= 0;
+      } else if (maxRent !== null && maxRent !== undefined) {
+        this.isValidRentRange = maxRent >= 0;
+      } else {
+        this.isValidRentRange = false;
+      }
     }
   }
 };
