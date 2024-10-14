@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ViewingMapper">
+    
+    <resultMap type="Viewing" id="ViewingResult">
+        <result property="viewingId"    column="viewing_id"    />
+        <result property="tenantId"    column="tenant_id"    />
+        <result property="propertyId"    column="property_id"    />
+        <result property="scheduledTime"    column="scheduled_time"    />
+        <result property="status"    column="status"    />
+        <result property="notes"    column="notes"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectViewingVo">
+        select viewing_id, tenant_id, property_id, scheduled_time, status, notes, created_at from viewing
+    </sql>
+
+    <select id="selectViewingList" parameterType="Viewing" resultMap="ViewingResult">
+        <include refid="selectViewingVo"/>
+        <where>  
+            <if test="tenantId != null "> and tenant_id = #{tenantId}</if>
+            <if test="propertyId != null "> and property_id = #{propertyId}</if>
+            <if test="scheduledTime != null "> and scheduled_time = #{scheduledTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="notes != null  and notes != ''"> and notes = #{notes}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectViewingByViewingId" parameterType="Long" resultMap="ViewingResult">
+        <include refid="selectViewingVo"/>
+        where viewing_id = #{viewingId}
+    </select>
+
+    <insert id="insertViewing" parameterType="Viewing" useGeneratedKeys="true" keyProperty="viewingId">
+        insert into viewing
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tenantId != null">tenant_id,</if>
+            <if test="propertyId != null">property_id,</if>
+            <if test="scheduledTime != null">scheduled_time,</if>
+            <if test="status != null">status,</if>
+            <if test="notes != null">notes,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tenantId != null">#{tenantId},</if>
+            <if test="propertyId != null">#{propertyId},</if>
+            <if test="scheduledTime != null">#{scheduledTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="notes != null">#{notes},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateViewing" parameterType="Viewing">
+        update viewing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tenantId != null">tenant_id = #{tenantId},</if>
+            <if test="propertyId != null">property_id = #{propertyId},</if>
+            <if test="scheduledTime != null">scheduled_time = #{scheduledTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="notes != null">notes = #{notes},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where viewing_id = #{viewingId}
+    </update>
+
+    <delete id="deleteViewingByViewingId" parameterType="Long">
+        delete from viewing where viewing_id = #{viewingId}
+    </delete>
+
+    <delete id="deleteViewingByViewingIds" parameterType="String">
+        delete from viewing where viewing_id in 
+        <foreach item="viewingId" collection="array" open="(" separator="," close=")">
+            #{viewingId}
+        </foreach>
+    </delete>
+</mapper>
