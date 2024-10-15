@@ -59,22 +59,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="租户ID" prop="tenantId">
-        <el-input
-          v-model="queryParams.tenantId"
-          placeholder="请输入租户ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="房东ID" prop="landlordId">
-        <el-input
-          v-model="queryParams.landlordId"
-          placeholder="请输入房东ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
           v-model="queryParams.createdAt"
@@ -149,8 +133,6 @@
       <el-table-column label="联系电话" align="center" prop="contactNumber" />
       <el-table-column label="邮箱地址" align="center" prop="email" />
       <el-table-column label="身份证号" align="center" prop="identificationNumber" />
-      <el-table-column label="租户ID" align="center" prop="tenantId" />
-      <el-table-column label="房东ID" align="center" prop="landlordId" />
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>
@@ -215,12 +197,6 @@
         <el-form-item label="身份证号" prop="identificationNumber">
           <el-input v-model="form.identificationNumber" placeholder="请输入身份证号" />
         </el-form-item>
-        <el-form-item label="租户ID" prop="tenantId">
-          <el-input v-model="form.tenantId" placeholder="请输入租户ID" />
-        </el-form-item>
-        <el-form-item label="房东ID" prop="landlordId">
-          <el-input v-model="form.landlordId" placeholder="请输入房东ID" />
-        </el-form-item>
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
             v-model="form.createdAt"
@@ -275,8 +251,6 @@ export default {
         contactNumber: null,
         email: null,
         identificationNumber: null,
-        tenantId: null,
-        landlordId: null,
         createdAt: null
       },
       // 表单参数
@@ -330,8 +304,6 @@ export default {
         contactNumber: null,
         email: null,
         identificationNumber: null,
-        tenantId: null,
-        landlordId: null,
         createdAt: null
       };
       this.resetForm("form");

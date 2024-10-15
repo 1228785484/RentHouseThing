@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 用户信息对象 usermanage
  * 
  * @author ruoyi
- * @date 2024-10-09
+ * @date 2024-10-15
  */
 public class Usermanage extends BaseEntity
 {
@@ -47,14 +47,6 @@ public class Usermanage extends BaseEntity
     /** 身份证号 */
     @Excel(name = "身份证号")
     private String identificationNumber;
-
-    /** 租户ID */
-    @Excel(name = "租户ID")
-    private Long tenantId;
-
-    /** 房东ID */
-    @Excel(name = "房东ID")
-    private Long landlordId;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -133,24 +125,6 @@ public class Usermanage extends BaseEntity
     {
         return identificationNumber;
     }
-    public void setTenantId(Long tenantId) 
-    {
-        this.tenantId = tenantId;
-    }
-
-    public Long getTenantId() 
-    {
-        return tenantId;
-    }
-    public void setLandlordId(Long landlordId) 
-    {
-        this.landlordId = landlordId;
-    }
-
-    public Long getLandlordId() 
-    {
-        return landlordId;
-    }
     public void setCreatedAt(Date createdAt) 
     {
         this.createdAt = createdAt;
@@ -172,8 +146,6 @@ public class Usermanage extends BaseEntity
             .append("contactNumber", getContactNumber())
             .append("email", getEmail())
             .append("identificationNumber", getIdentificationNumber())
-            .append("tenantId", getTenantId())
-            .append("landlordId", getLandlordId())
             .append("createdAt", getCreatedAt())
             .toString();
     }
