@@ -25,6 +25,16 @@
           placeholder="请选择预约看房时间">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="看房状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择看房状态" clearable>
+          <el-option
+            v-for="dict in dict.type.appointment_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
           v-model="queryParams.createdAt"
@@ -95,7 +105,11 @@
           <span>{{ parseTime(scope.row.scheduledTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="看房状态" align="center" prop="status" />
+      <el-table-column label="看房状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.appointment_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
       <el-table-column label="备注信息" align="center" prop="notes" />
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
         <template slot-scope="scope">
@@ -147,6 +161,16 @@
             placeholder="请选择预约看房时间">
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="看房状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择看房状态">
+            <el-option
+              v-for="dict in dict.type.appointment_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注信息" prop="notes">
           <el-input v-model="form.notes" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -172,6 +196,7 @@ import { listViewing, getViewing, delViewing, addViewing, updateViewing } from "
 
 export default {
   name: "Viewing",
+  dicts: ['appointment_status'],
   data() {
     return {
       // 遮罩层
@@ -209,6 +234,9 @@ export default {
       rules: {
         scheduledTime: [
           { required: true, message: "预约看房时间不能为空", trigger: "blur" }
+        ],
+        status: [
+          { required: true, message: "看房状态不能为空", trigger: "change" }
         ],
       }
     };

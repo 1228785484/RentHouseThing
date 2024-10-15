@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="tenantId != null "> and tenant_id = #{tenantId}</if>
             <if test="propertyId != null "> and property_id = #{propertyId}</if>
             <if test="scheduledTime != null "> and scheduled_time = #{scheduledTime}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="status != null "> and status = #{status}</if>
             <if test="notes != null  and notes != ''"> and notes = #{notes}</if>
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
         </where>

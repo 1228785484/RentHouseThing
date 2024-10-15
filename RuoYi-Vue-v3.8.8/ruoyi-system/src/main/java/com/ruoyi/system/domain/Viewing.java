@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 看房信息对象 viewing
  * 
  * @author ruoyi
- * @date 2024-10-14
+ * @date 2024-10-15
  */
 public class Viewing extends BaseEntity
 {
@@ -35,7 +35,7 @@ public class Viewing extends BaseEntity
 
     /** 看房状态 */
     @Excel(name = "看房状态")
-    private String status;
+    private Long status;
 
     /** 备注信息 */
     @Excel(name = "备注信息")
@@ -82,12 +82,12 @@ public class Viewing extends BaseEntity
     {
         return scheduledTime;
     }
-    public void setStatus(String status) 
+    public void setStatus(Long status) 
     {
         this.status = status;
     }
 
-    public String getStatus() 
+    public Long getStatus() 
     {
         return status;
     }

@@ -7,7 +7,7 @@ import com.ruoyi.system.domain.Viewing;
  * 看房信息Mapper接口
  * 
  * @author ruoyi
- * @date 2024-10-14
+ * @date 2024-10-15
  */
 public interface ViewingMapper 
 {

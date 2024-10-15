@@ -11,7 +11,7 @@ import com.ruoyi.system.service.IViewingService;
  * 看房信息Service业务层处理
  * 
  * @author ruoyi
- * @date 2024-10-14
+ * @date 2024-10-15
  */
 @Service
 public class ViewingServiceImpl implements IViewingService 
