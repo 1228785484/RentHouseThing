@@ -354,8 +354,8 @@ export default {
         imageUrl: null,
         createdAt: null,
         propertyName: null,
-        minRent: null,  // 新增
-        maxRent: null   // 新增
+        minRent: 0,  // 新增
+        maxRent: 10000   // 新增
       },
       // 表单参数
       form: {},
@@ -371,7 +371,7 @@ export default {
           { required: true, message: "房源名字不能为空", trigger: "blur" }
         ]
       },
-      isValidRentRange: false,
+      isValidRentRange: true,
     };
   },
   created() {
