@@ -54,6 +54,7 @@ export default {
   methods: {
     handleChange(value) {
       this.selectLocation = value;
+      console.log(value)
       const labels = value.map(v => this.labelMap.get(v) || '').filter(Boolean);
       const labelString = labels.join(',');
       this.$emit("input", labelString);
@@ -68,6 +69,7 @@ export default {
         return;
       }
       const labelArray = labels.split(',');
+      console.log("数值是Array!"+labelArray)
       this.selectLocation = Array.from(this.labelMap.entries())
         .filter(([_, label]) => labelArray.includes(label))
         .map(([value, _]) => value);

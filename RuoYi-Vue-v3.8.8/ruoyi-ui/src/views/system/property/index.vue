@@ -40,6 +40,7 @@
           :min="queryParams.minRent || 0"
           @change="validateRentRange"
         />
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleRentRangeQuery">租金范围搜索</el-button>
       </el-form-item>
 
       <el-form-item label="押金" prop="deposit">
@@ -156,6 +157,13 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-view"
+            @click="handleView(scope.row)"
+            v-hasPermi="['system:property:query']"
+          >查看</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:property:edit']"
@@ -179,6 +187,53 @@
       @pagination="getList"
     />
 
+    <!-- 添加查看房源信息对话框 -->
+<el-dialog :title="'查看房源信息'" :visible.sync="viewDialogVisible" width="50%" append-to-body>
+  <el-descriptions :column="2" border>
+    <el-descriptions-item label="房源ID">{{ viewForm.propertyId }}</el-descriptions-item>
+    <el-descriptions-item label="房东ID">{{ viewForm.landlordId }}</el-descriptions-item>
+    <el-descriptions-item label="地址">{{ viewForm.address }}</el-descriptions-item>
+    <el-descriptions-item label="租金价格">{{ viewForm.rentPrice }}</el-descriptions-item>
+    <el-descriptions-item label="押金">{{ viewForm.deposit }}</el-descriptions-item>
+    <el-descriptions-item label="是否可用">
+      <dict-tag :options="dict.type.sys_normal_disable" :value="viewForm.available"/>
+    </el-descriptions-item>
+    <el-descriptions-item label="创建时间">
+      {{ parseTime(viewForm.createdAt, '{y}-{m}-{d}') }}
+    </el-descriptions-item>
+    <el-descriptions-item label="房源名字">{{ viewForm.propertyName }}</el-descriptions-item>
+  </el-descriptions>
+
+  <el-divider content-position="center">房源属性信息</el-divider>
+
+  <el-table :data="viewForm.propertyattributesList" border stripe>
+    <el-table-column label="朝向" prop="orientation" align="center">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.orientation" :value="scope.row.orientation"/>
+      </template>
+    </el-table-column>
+    <el-table-column label="是否有独立卫浴" prop="hasIndependentBathroom" align="center">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasIndependentBathroom"/>
+      </template>
+    </el-table-column>
+    <el-table-column label="是否有空调" prop="hasAirConditioning" align="center">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasAirConditioning"/>
+      </template>
+    </el-table-column>
+    <el-table-column label="几人间" prop="numberOfBeds" align="center" />
+    <el-table-column label="房间结构" prop="roomStructure" align="center" />
+    <el-table-column label="是否有阳台" prop="hasBalcony" align="center">
+      <template slot-scope="scope">
+        <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasBalcony"/>
+      </template>
+    </el-table-column>
+    <el-table-column label="房间号" prop="roomNumber" align="center" />
+  </el-table>
+</el-dialog>
+
+
     <!-- 添加或修改房源信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
@@ -186,7 +241,7 @@
           <el-input v-model="form.landlordId" placeholder="请输入房东ID" />
         </el-form-item>
         <el-form-item label="地址" prop="address">
-          <LocSelector v-model="form.address" placeholder="请选择地址" />
+          <LocSelector ref="locSelector" v-model="form.address" placeholder="请选择地址" />
           <el-input v-model="form.detailAddress" placeholder="请输入详细地址" />
         </el-form-item>
         <el-form-item label="租金价格" prop="rentPrice">
@@ -319,6 +374,9 @@ export default {
   dicts: ['sys_yes_no', 'sys_normal_disable', 'orientation'],
   data() {
     return {
+      // 查看房源信息对话框
+      viewDialogVisible: false,
+      viewForm: {},
       // 遮罩层
       loading: true,
       // 选中数组
@@ -378,6 +436,11 @@ export default {
     this.getList();
   },
   methods: {
+    /** 查看按钮操作 */
+    handleView(row) {
+      this.viewForm = JSON.parse(JSON.stringify(row));
+      this.viewDialogVisible = true;
+    },
     /** 查询房源信息列表 */
     getList() {
       this.loading = true;
@@ -411,6 +474,10 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 租金范围搜索按钮操作 */
+    handleRentRangeQuery() {
       if (this.queryParams.minRent !== null && this.queryParams.maxRent !== null) {
         if (this.isValidRentRange) {
           this.loading = true;
@@ -421,10 +488,9 @@ export default {
           });
         } else {
           this.$message.error('请输入有效的租金范围');
-          return;
         }
       } else {
-        this.getList();
+        this.$message.error('请输入完整的租金范围');
       }
     },
     /** 重置按钮操作 */
@@ -454,8 +520,10 @@ export default {
         if (this.form.address) {
           const addressParts = this.form.address.split(',');
           if (addressParts.length > 3) {
-            this.form.address = addressParts.slice(0, 3);
+            // 将地址和详细地址分开
+            this.form.address = addressParts.slice(0, 3).join(',');
             this.form.detailAddress = addressParts.slice(3).join(',');
+            // this.$emit("change", this.form.address);
           }
         }
 
