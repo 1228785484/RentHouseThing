@@ -37,9 +37,12 @@ export default {
     value: {
       immediate: true,
       handler(newVal) {
+        console.log("数值改变!")
         if (typeof newVal === 'string') {
+          console.log("数值是String!"+newVal)
           this.setLocationFromLabels(newVal);
         } else if (Array.isArray(newVal)) {
+          console.log("数值是Array!"+newVal)
           this.selectLocation = newVal;
         }
         // if (newVal !== this.getLabels(this.selectLocation)) {
