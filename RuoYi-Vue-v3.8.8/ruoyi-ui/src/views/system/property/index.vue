@@ -439,6 +439,17 @@ export default {
     /** 查看按钮操作 */
     handleView(row) {
       this.viewForm = JSON.parse(JSON.stringify(row));
+      const propertyId = row.propertyId;
+
+      getProperty(propertyId).then(response => {
+        this.viewForm = response.data;
+
+        this.viewForm.propertyattributesList = response.data.propertyattributesList;
+        this.viewDialogVisible = true;
+      }).catch(error => {
+        console.error("获取房源属性失败:", error);
+        this.$message.error("获取房源属性失败，请稍后重试");
+      });
       this.viewDialogVisible = true;
     },
     /** 查询房源信息列表 */
