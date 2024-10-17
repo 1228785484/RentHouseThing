@@ -137,4 +137,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ( #{item.attributeId}, #{item.propertyId}, #{item.orientation}, #{item.hasIndependentBathroom}, #{item.hasAirConditioning}, #{item.numberOfBeds}, #{item.roomStructure}, #{item.hasBalcony}, #{item.furnitureTypes}, #{item.createdAt}, #{item.roomNumber})
         </foreach>
     </insert>
+
+    <select id="selectLandLordNameByLandlordId" resultType="java.lang.String">
+        SELECT name
+        FROM landlord
+        WHERE landlord_id = #{landlordId}
+    </select>
 </mapper>

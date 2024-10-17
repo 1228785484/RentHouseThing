@@ -38,6 +38,11 @@ public class PropertyController extends BaseController
         return getDataTable(list);
     }
 
+    @GetMapping("/getLandlordName")
+    public String selectLandLordNameByLandlordId(@RequestParam("landlordId") Long landlordId) {
+        return propertyService.selectLandLordNameByLandlordId(landlordId);
+    }
+
 
     /**
      * 查询房源信息列表

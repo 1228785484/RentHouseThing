@@ -15,6 +15,8 @@ public interface IPropertyService
 {
     public List<Property> findPropertiesByRentRange(@Param("minRent") BigDecimal minRent, @Param("maxRent") BigDecimal maxRent);
 
+    public String selectLandLordNameByLandlordId(@Param("landlordId") Long LandlordId);
+
 
 
     /**

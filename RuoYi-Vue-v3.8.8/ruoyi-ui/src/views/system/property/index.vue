@@ -192,6 +192,7 @@
   <el-descriptions :column="2" border>
     <el-descriptions-item label="房源ID">{{ viewForm.propertyId }}</el-descriptions-item>
     <el-descriptions-item label="房东ID">{{ viewForm.landlordId }}</el-descriptions-item>
+    <el-descriptions-item label="房东">{{ viewForm.landlordName || viewForm.landlordId }}</el-descriptions-item>
     <el-descriptions-item label="地址">{{ viewForm.address }}</el-descriptions-item>
     <el-descriptions-item label="租金价格">{{ viewForm.rentPrice }}</el-descriptions-item>
     <el-descriptions-item label="押金">{{ viewForm.deposit }}</el-descriptions-item>
@@ -363,7 +364,7 @@
   </div>
 </template>
 <script>
-import { listProperty, getProperty, delProperty, addProperty, updateProperty } from "@/api/system/property";
+import { listProperty, getProperty, delProperty, addProperty, updateProperty,getLandlordFromLandlordId } from "@/api/system/property";
 import { listPropertyByRentRange } from '@/api/system/property'; // 新增的引入
 import LocSelector from "@/layout/components/Location/LocSelector.vue";
 
@@ -430,6 +431,8 @@ export default {
         ]
       },
       isValidRentRange: true,
+      // ... 其他数据属性
+      landlordName: '',
     };
   },
   created() {
@@ -443,14 +446,23 @@ export default {
 
       getProperty(propertyId).then(response => {
         this.viewForm = response.data;
-
         this.viewForm.propertyattributesList = response.data.propertyattributesList;
-        this.viewDialogVisible = true;
+
+        // 获取房东信息
+        getLandlordFromLandlordId(this.viewForm.landlordId).then(resp => {
+          console.log(resp);
+          this.viewForm.landlordName = resp; // 使用新的属性名 landlordName
+          this.viewDialogVisible = true;
+        }).catch(error => {
+          console.error("获取房东信息失败:", error);
+          this.$message.warning("获取房东信息失败，将显示房东ID");
+          this.viewForm.landlordName = this.viewForm.landlordId;
+          this.viewDialogVisible = true;
+        });
       }).catch(error => {
         console.error("获取房源属性失败:", error);
         this.$message.error("获取房源属性失败，请稍后重试");
       });
-      this.viewDialogVisible = true;
     },
     /** 查询房源信息列表 */
     getList() {

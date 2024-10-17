@@ -37,6 +37,11 @@ public class PropertyServiceImpl implements IPropertyService
         return propertyMapper.findPropertiesByRentRange(minRent, maxRent);
     }
 
+    @Override
+    public String selectLandLordNameByLandlordId(Long LandlordId) {
+        return propertyMapper.selectLandLordNameByLandlordId(LandlordId);
+    }
+
 
     /**
      * 查询房源信息

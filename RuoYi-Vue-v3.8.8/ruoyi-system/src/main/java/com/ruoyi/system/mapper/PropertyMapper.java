@@ -95,4 +95,7 @@ public interface PropertyMapper
 
     public List<Property> findPropertiesByRentRange(@Param("minRent") BigDecimal minRent,
                                                     @Param("maxRent") BigDecimal maxRent);
+
+    public String selectLandLordNameByLandlordId(Long landlordId);
+
 }

@@ -10,6 +10,13 @@ export function listPropertyByRentRange(minRent, maxRent) {
   });
 }
 
+export function getLandlordFromLandlordId(landlordId) {
+  return request({
+    url: '/system/property/getLandlordName/',
+    method: 'get',
+    params: { landlordId }
+  })
+}
 
 // 查询房源信息列表
 export function listProperty(query) {
