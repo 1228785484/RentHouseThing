@@ -11,22 +11,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="用户名" prop="username">
-        <el-input
-          v-model="queryParams.username"
-          placeholder="请输入用户名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input
-          v-model="queryParams.password"
-          placeholder="请输入密码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="姓名" prop="name">
         <el-input
           v-model="queryParams.name"
@@ -55,6 +39,22 @@
         <el-input
           v-model="queryParams.identificationNumber"
           placeholder="请输入身份证号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="租户ID" prop="tenantId">
+        <el-input
+          v-model="queryParams.tenantId"
+          placeholder="请输入租户ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="房东ID" prop="landlordId">
+        <el-input
+          v-model="queryParams.landlordId"
+          placeholder="请输入房东ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -127,8 +127,6 @@
           <dict-tag :options="dict.type.ersonnel_management" :value="scope.row.userType"/>
         </template>
       </el-table-column>
-      <el-table-column label="用户名" align="center" prop="username" />
-      <el-table-column label="密码" align="center" prop="password" />
       <el-table-column label="姓名" align="center" prop="name" />
       <el-table-column label="联系电话" align="center" prop="contactNumber" />
       <el-table-column label="邮箱地址" align="center" prop="email" />
@@ -197,6 +195,12 @@
         <el-form-item label="身份证号" prop="identificationNumber">
           <el-input v-model="form.identificationNumber" placeholder="请输入身份证号" />
         </el-form-item>
+        <el-form-item label="租户ID" prop="tenantId">
+          <el-input v-model="form.tenantId" placeholder="请输入租户ID" />
+        </el-form-item>
+        <el-form-item label="房东ID" prop="landlordId">
+          <el-input v-model="form.landlordId" placeholder="请输入房东ID" />
+        </el-form-item>
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
             v-model="form.createdAt"
@@ -245,12 +249,12 @@ export default {
         pageNum: 1,
         pageSize: 10,
         userType: null,
-        username: null,
-        password: null,
         name: null,
         contactNumber: null,
         email: null,
         identificationNumber: null,
+        tenantId: null,
+        landlordId: null,
         createdAt: null
       },
       // 表单参数
@@ -304,6 +308,8 @@ export default {
         contactNumber: null,
         email: null,
         identificationNumber: null,
+        tenantId: null,
+        landlordId: null,
         createdAt: null
       };
       this.resetForm("form");

@@ -7,7 +7,7 @@ import com.ruoyi.system.domain.Usermanage;
  * 用户信息Mapper接口
  * 
  * @author ruoyi
- * @date 2024-10-15
+ * @date 2024-10-17
  */
 public interface UsermanageMapper 
 {

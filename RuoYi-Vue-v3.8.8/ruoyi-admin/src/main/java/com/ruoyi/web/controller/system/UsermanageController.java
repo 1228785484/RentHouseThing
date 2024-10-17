@@ -25,7 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * 用户信息Controller
  * 
  * @author ruoyi
- * @date 2024-10-15
+ * @date 2024-10-17
  */
 @RestController
 @RequestMapping("/system/usermanage")

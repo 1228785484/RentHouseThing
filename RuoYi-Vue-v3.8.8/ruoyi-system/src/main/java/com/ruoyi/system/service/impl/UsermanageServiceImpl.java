@@ -11,7 +11,7 @@ import com.ruoyi.system.service.IUsermanageService;
  * 用户信息Service业务层处理
  * 
  * @author ruoyi
- * @date 2024-10-15
+ * @date 2024-10-17
  */
 @Service
 public class UsermanageServiceImpl implements IUsermanageService 
