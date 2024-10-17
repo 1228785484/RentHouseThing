@@ -28,19 +28,19 @@
 
       <el-form-item label="租金范围" prop="rentRange">
         <el-input-number
-          v-model="queryParams.minRent"
+          v-model="queryParams.minRentPrice"
           placeholder="最小租金"
           :min="0"
-          :max="queryParams.maxRent || Infinity"
+          :max="queryParams.maxRentPrice || Infinity"
           @change="validateRentRange"
         />
         <el-input-number
-          v-model="queryParams.maxRent"
+          v-model="queryParams.maxRentPrice"
           placeholder="最大租金"
-          :min="queryParams.minRent || 0"
+          :min="queryParams.minRentPrice || 0"
           @change="validateRentRange"
         />
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleRentRangeQuery">租金范围搜索</el-button>
+<!--        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleRentRangeQuery">租金范围搜索</el-button>-->
       </el-form-item>
 
       <el-form-item label="押金" prop="deposit">
@@ -195,7 +195,7 @@
     <el-descriptions-item label="房东">{{ viewForm.landlordName || viewForm.landlordId }}</el-descriptions-item>
     <el-descriptions-item label="地址">{{ viewForm.address }}</el-descriptions-item>
     <el-descriptions-item label="租金价格">{{ viewForm.rentPrice }}</el-descriptions-item>
-    <el-descriptions-item label="押金">{{ viewForm.deposit }}</el-descriptions-item>
+    <el-descriptions-item label="押���">{{ viewForm.deposit }}</el-descriptions-item>
     <el-descriptions-item label="是否可用">
       <dict-tag :options="dict.type.sys_normal_disable" :value="viewForm.available"/>
     </el-descriptions-item>
@@ -349,7 +349,7 @@
               <el-date-picker clearable v-model="scope.row.createdAt" type="date" value-format="yyyy-MM-dd" placeholder="请选择创建时间" />
             </template>
           </el-table-column>
-          <el-table-column label="房间号" prop="roomNumber" width="150">
+          <el-table-column label="房间��" prop="roomNumber" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.roomNumber" placeholder="请输入房间号" />
             </template>
@@ -398,7 +398,7 @@ export default {
       propertyattributesList: [],
       // 弹出层标题
       title: "",
-      // 是否显示弹出层
+      // 否显示弹出层
       open: false,
       // 查询参数
       queryParams: {
@@ -413,8 +413,8 @@ export default {
         imageUrl: null,
         createdAt: null,
         propertyName: null,
-        minRent: 0,  // 新增
-        maxRent: 10000   // 新增
+        minRentPrice: 0,  // 修改这里
+        maxRentPrice: 10000   // 修改这里
       },
       // 表单参数
       form: {},
@@ -497,14 +497,34 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
-      this.getList();
+      this.loading = true;
+      // 如果设置了租金范围，先根据租金范围查询
+      if (this.queryParams.minRentPrice !== null && this.queryParams.maxRentPrice !== null && this.isValidRentRange) {
+        listPropertyByRentRange(this.queryParams.minRentPrice, this.queryParams.maxRentPrice).then(response => {
+          const rentRangeResults = response.rows;
+          // 根据其他查询条件进行查询
+          listProperty(this.queryParams).then(otherResponse => {
+            const otherQueryResults = otherResponse.rows;
+            // 找出两次查询结果的交集
+            const combinedResults = rentRangeResults.filter(item1 =>
+              otherQueryResults.some(item2 => item1.propertyId === item2.propertyId)
+            );
+            this.propertyList = combinedResults;
+            this.total = combinedResults.length;
+            this.loading = false;
+          });
+        });
+      } else {
+        this.getList(); // 没有设置租金范围，执行原来的查询操作
+      }
     },
+
     /** 租金范围搜索按钮操作 */
     handleRentRangeQuery() {
-      if (this.queryParams.minRent !== null && this.queryParams.maxRent !== null) {
+      if (this.queryParams.minRentPrice !== null && this.queryParams.maxRentPrice !== null) {
         if (this.isValidRentRange) {
           this.loading = true;
-          listPropertyByRentRange(this.queryParams.minRent, this.queryParams.maxRent).then(response => {
+          listPropertyByRentRange(this.queryParams.minRentPrice, this.queryParams.maxRentPrice).then(response => {
             this.propertyList = response.rows;
             this.total = response.total;
             this.loading = false;
@@ -516,6 +536,24 @@ export default {
         this.$message.error('请输入完整的租金范围');
       }
     },
+
+    /** 租金范围搜索按钮操作 */
+    // handleRentRangeQuery() {
+    //   if (this.queryParams.minRentPrice !== null && this.queryParams.maxRentPrice !== null) {
+    //     if (this.isValidRentRange) {
+    //       this.loading = true;
+    //       listPropertyByRentRange(this.queryParams.minRentPrice, this.queryParams.maxRentPrice).then(response => {
+    //         this.propertyList = response.rows;
+    //         this.total = response.total;
+    //         this.loading = false;
+    //       });
+    //     } else {
+    //       this.$message.error('请输入有效的租金范围');
+    //     }
+    //   } else {
+    //     this.$message.error('请输入完整的租金范围');
+    //   }
+    // },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
@@ -630,12 +668,12 @@ export default {
       }, `property_${new Date().getTime()}.xlsx`);
     },
     validateRentRange() {
-      const {minRent, maxRent} = this.queryParams;
-      this.isValidRentRange = minRent !== null && maxRent !== null && minRent >= 0 && maxRent >= minRent;
+      const {minRentPrice, maxRentPrice} = this.queryParams;
+      this.isValidRentRange = minRentPrice !== null && maxRentPrice !== null && minRentPrice >= 0 && maxRentPrice >= minRentPrice;
 
       // 如果最小租金大于最大租金，自动调整最大租金
-      if (minRent > maxRent) {
-        this.queryParams.maxRent = minRent;
+      if (minRentPrice > maxRentPrice) {
+        this.queryParams.maxRentPrice = minRentPrice;
       }
     }
   }
