@@ -44,10 +44,9 @@ export function delLandlord(landlordId) {
 }
 
 //查询房东ID列表
-export function listLandlordId(query) {
+export function listLandlordId() {
   return request({
-    url: '/system/landlord/listLandlordId',
+    url: '/system/landlord/ids',
     method: 'get',
-    params: query
   })
 }

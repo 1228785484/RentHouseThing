@@ -2,9 +2,9 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="房东ID" prop="landlordId">
-        <el-input
+        <landlord-selector
           v-model="queryParams.landlordId"
-          placeholder="请输入房东ID"
+          placeholder="请选择房东ID"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -239,7 +239,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="房东ID" prop="landlordId">
-          <el-input v-model="form.landlordId" placeholder="请输入房东ID" />
+          <landlord-selector v-model="form.landlordId" />
         </el-form-item>
         <el-form-item label="地址" prop="address">
           <LocSelector ref="locSelector" v-model="form.address" placeholder="请选择地址" />
@@ -367,11 +367,13 @@
 import { listProperty, getProperty, delProperty, addProperty, updateProperty,getLandlordFromLandlordId } from "@/api/system/property";
 import { listPropertyByRentRange } from '@/api/system/property'; // 新增的引入
 import LocSelector from "@/layout/components/Location/LocSelector.vue";
+import LandlordSelector from '@/layout/components/Selectors/LandlordSelector.vue';
+
 
 
 export default {
   name: "Property",
-  components: {LocSelector},
+  components: {LocSelector,LandlordSelector},
   dicts: ['sys_yes_no', 'sys_normal_disable', 'orientation'],
   data() {
     return {
