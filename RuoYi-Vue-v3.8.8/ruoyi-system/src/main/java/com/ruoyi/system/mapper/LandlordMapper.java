@@ -58,4 +58,6 @@ public interface LandlordMapper
      * @return 结果
      */
     public int deleteLandlordByLandlordIds(Long[] landlordIds);
+
+    public List<Long> getLandlordIds();
 }

@@ -45,9 +45,6 @@ export default {
           console.log("数值是Array!"+newVal)
           this.selectLocation = newVal;
         }
-        // if (newVal !== this.getLabels(this.selectLocation)) {
-        //   this.setLocationFromLabels(newVal);
-        // }
       }
     }
   },

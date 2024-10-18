@@ -195,7 +195,7 @@
     <el-descriptions-item label="房东">{{ viewForm.landlordName || viewForm.landlordId }}</el-descriptions-item>
     <el-descriptions-item label="地址">{{ viewForm.address }}</el-descriptions-item>
     <el-descriptions-item label="租金价格">{{ viewForm.rentPrice }}</el-descriptions-item>
-    <el-descriptions-item label="押���">{{ viewForm.deposit }}</el-descriptions-item>
+    <el-descriptions-item label="押金">{{ viewForm.deposit }}</el-descriptions-item>
     <el-descriptions-item label="是否可用">
       <dict-tag :options="dict.type.sys_normal_disable" :value="viewForm.available"/>
     </el-descriptions-item>
@@ -349,7 +349,7 @@
               <el-date-picker clearable v-model="scope.row.createdAt" type="date" value-format="yyyy-MM-dd" placeholder="请选择创建时间" />
             </template>
           </el-table-column>
-          <el-table-column label="房间��" prop="roomNumber" width="150">
+          <el-table-column label="房间号" prop="roomNumber" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.roomNumber" placeholder="请输入房间号" />
             </template>

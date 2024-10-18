@@ -73,4 +73,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{landlordId}
         </foreach>
     </delete>
+
+    <select id="getLandlordIds" resultType="java.lang.Long">
+        select landlord_id from landlord
+    </select>
 </mapper>

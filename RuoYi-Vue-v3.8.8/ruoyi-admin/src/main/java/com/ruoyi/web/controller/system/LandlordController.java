@@ -46,6 +46,14 @@ public class LandlordController extends BaseController
         return getDataTable(list);
     }
 
+    @GetMapping("/ids")
+    public List<Long> getAllLandlordIds() {
+        return landlordService.getAllLandlordIds();
+    }
+
+
+
+
     /**
      * 导出房东信息列表
      */

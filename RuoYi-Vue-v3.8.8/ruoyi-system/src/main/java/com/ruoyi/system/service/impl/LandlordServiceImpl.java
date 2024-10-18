@@ -90,4 +90,9 @@ public class LandlordServiceImpl implements ILandlordService
     {
         return landlordMapper.deleteLandlordByLandlordId(landlordId);
     }
+
+    @Override
+    public List<Long> getAllLandlordIds() {
+        return landlordMapper.getLandlordIds();
+    }
 }

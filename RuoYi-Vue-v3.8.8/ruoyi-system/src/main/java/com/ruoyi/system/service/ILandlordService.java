@@ -58,4 +58,6 @@ public interface ILandlordService
      * @return 结果
      */
     public int deleteLandlordByLandlordId(Long landlordId);
+
+    public List<Long> getAllLandlordIds();
 }
