@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.LeaseagreementMapper">
+    
+    <resultMap type="Leaseagreement" id="LeaseagreementResult">
+        <result property="agreementId"    column="agreement_id"    />
+        <result property="tenantId"    column="tenant_id"    />
+        <result property="propertyId"    column="property_id"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="monthlyRent"    column="monthly_rent"    />
+        <result property="agreementType"    column="agreement_type"    />
+        <result property="status"    column="status"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="agreementTypeAll"    column="agreement_type_all"    />
+    </resultMap>
+
+    <sql id="selectLeaseagreementVo">
+        select agreement_id, tenant_id, property_id, start_date, end_date, monthly_rent, agreement_type, status, created_at, agreement_type_all from leaseagreement
+    </sql>
+
+    <select id="selectLeaseagreementList" parameterType="Leaseagreement" resultMap="LeaseagreementResult">
+        <include refid="selectLeaseagreementVo"/>
+        <where>  
+            <if test="tenantId != null "> and tenant_id = #{tenantId}</if>
+            <if test="propertyId != null "> and property_id = #{propertyId}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="monthlyRent != null "> and monthly_rent = #{monthlyRent}</if>
+            <if test="agreementType != null  and agreementType != ''"> and agreement_type = #{agreementType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="agreementTypeAll != null  and agreementTypeAll != ''"> and agreement_type_all = #{agreementTypeAll}</if>
+        </where>
+    </select>
+    
+    <select id="selectLeaseagreementByAgreementId" parameterType="Long" resultMap="LeaseagreementResult">
+        <include refid="selectLeaseagreementVo"/>
+        where agreement_id = #{agreementId}
+    </select>
+
+    <insert id="insertLeaseagreement" parameterType="Leaseagreement" useGeneratedKeys="true" keyProperty="agreementId">
+        insert into leaseagreement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tenantId != null">tenant_id,</if>
+            <if test="propertyId != null">property_id,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="monthlyRent != null">monthly_rent,</if>
+            <if test="agreementType != null and agreementType != ''">agreement_type,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="agreementTypeAll != null and agreementTypeAll != ''">agreement_type_all,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tenantId != null">#{tenantId},</if>
+            <if test="propertyId != null">#{propertyId},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="monthlyRent != null">#{monthlyRent},</if>
+            <if test="agreementType != null and agreementType != ''">#{agreementType},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="agreementTypeAll != null and agreementTypeAll != ''">#{agreementTypeAll},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLeaseagreement" parameterType="Leaseagreement">
+        update leaseagreement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tenantId != null">tenant_id = #{tenantId},</if>
+            <if test="propertyId != null">property_id = #{propertyId},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="monthlyRent != null">monthly_rent = #{monthlyRent},</if>
+            <if test="agreementType != null and agreementType != ''">agreement_type = #{agreementType},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="agreementTypeAll != null and agreementTypeAll != ''">agreement_type_all = #{agreementTypeAll},</if>
+        </trim>
+        where agreement_id = #{agreementId}
+    </update>
+
+    <delete id="deleteLeaseagreementByAgreementId" parameterType="Long">
+        delete from leaseagreement where agreement_id = #{agreementId}
+    </delete>
+
+    <delete id="deleteLeaseagreementByAgreementIds" parameterType="String">
+        delete from leaseagreement where agreement_id in 
+        <foreach item="agreementId" collection="array" open="(" separator="," close=")">
+            #{agreementId}
+        </foreach>
+    </delete>
+</mapper>
