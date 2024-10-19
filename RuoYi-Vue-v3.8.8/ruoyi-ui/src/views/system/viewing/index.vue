@@ -2,27 +2,31 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="租户ID" prop="tenantId">
-        <el-input
-          v-model="queryParams.tenantId"
-          placeholder="请输入租户ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.tenantId" placeholder="请选择租户ID" clearable>
+          <el-option
+            v-for="tenant in tenantList"
+            :key="tenant.tenantId"
+            :label="tenant.tenantId"
+            :value="tenant.tenantId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="房源ID" prop="propertyId">
-        <el-input
-          v-model="queryParams.propertyId"
-          placeholder="请输入房源ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.propertyId" placeholder="请选择房源ID" clearable>
+          <el-option
+            v-for="property in propertyList"
+            :key="property.propertyId"
+            :label="property.propertyId"
+            :value="property.propertyId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="预约看房时间" prop="scheduledTime">
         <el-date-picker clearable
-          v-model="queryParams.scheduledTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择预约看房时间">
+                        v-model="queryParams.scheduledTime"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="请选择预约看房时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="看房状态" prop="status">
@@ -37,10 +41,10 @@
       </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
-          v-model="queryParams.createdAt"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择创建时间">
+                        v-model="queryParams.createdAt"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="请选择创建时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -135,7 +139,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -148,17 +152,31 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="租户ID" prop="tenantId">
-          <el-input v-model="form.tenantId" placeholder="请输入租户ID" />
+          <el-select v-model="form.tenantId" placeholder="请选择租户ID">
+            <el-option
+              v-for="tenant in tenantList"
+              :key="tenant.tenantId"
+              :label="tenant.tenantId"
+              :value="tenant.tenantId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="房源ID" prop="propertyId">
-          <el-input v-model="form.propertyId" placeholder="请输入房源ID" />
+          <el-select v-model="form.propertyId" placeholder="请选择房源ID">
+            <el-option
+              v-for="property in propertyList"
+              :key="property.propertyId"
+              :label="property.propertyId"
+              :value="property.propertyId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="预约看房时间" prop="scheduledTime">
           <el-date-picker clearable
-            v-model="form.scheduledTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择预约看房时间">
+                          v-model="form.scheduledTime"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="请选择预约看房时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="看房状态" prop="status">
@@ -176,10 +194,10 @@
         </el-form-item>
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
-            v-model="form.createdAt"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择创建时间">
+                          v-model="form.createdAt"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="请选择创建时间">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -193,6 +211,8 @@
 
 <script>
 import { listViewing, getViewing, delViewing, addViewing, updateViewing } from "@/api/system/viewing";
+import { listTenant } from "@/api/system/tenant";
+import { listProperty } from "@/api/system/property";
 
 export default {
   name: "Viewing",
@@ -238,11 +258,15 @@ export default {
         status: [
           { required: true, message: "看房状态不能为空", trigger: "change" }
         ],
-      }
+      },
+      tenantList: [],
+      propertyList: [],
     };
   },
   created() {
     this.getList();
+    this.getTenantList();
+    this.getPropertyList();
   },
   methods: {
     /** 查询看房信息列表 */
@@ -339,7 +363,20 @@ export default {
       this.download('system/viewing/export', {
         ...this.queryParams
       }, `viewing_${new Date().getTime()}.xlsx`)
-    }
+    },
+    /** 获取租户列表 */
+    getTenantList() {
+      listTenant().then(response => {
+        this.tenantList = response.rows;
+      });
+    },
+
+    /** 获取房源列表 */
+    getPropertyList() {
+      listProperty().then(response => {
+        this.propertyList = response.rows;
+      });
+    },
   }
 };
 </script>

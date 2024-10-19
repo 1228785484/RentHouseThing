@@ -43,28 +43,40 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+
       <el-form-item label="租户ID" prop="tenantId">
-        <el-input
-          v-model="queryParams.tenantId"
-          placeholder="请输入租户ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select
+          v-model="form.tenantId"
+          placeholder="请选择租户ID"
+          clearable>
+          <el-option
+            v-for="tenant in tenantList"
+            :key="tenant.tenantId"
+            :label="tenant.tenantId"
+            :value="tenant.tenantId">
+          </el-option>
+        </el-select>
       </el-form-item>
+
       <el-form-item label="房东ID" prop="landlordId">
-        <el-input
+        <el-select
           v-model="queryParams.landlordId"
-          placeholder="请输入房东ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+          placeholder="请选择房东ID"
+          clearable>
+          <el-option
+            v-for="landlord in landlordList"
+            :key="landlord.landlordId"
+            :label="landlord.landlordId"
+            :value="landlord.landlordId">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
-          v-model="queryParams.createdAt"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择创建时间">
+                        v-model="queryParams.createdAt"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="请选择创建时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -155,7 +167,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -196,17 +208,39 @@
           <el-input v-model="form.identificationNumber" placeholder="请输入身份证号" />
         </el-form-item>
         <el-form-item label="租户ID" prop="tenantId">
-          <el-input v-model="form.tenantId" placeholder="请输入租户ID" />
+          <el-select
+            v-model="form.tenantId"
+            placeholder="请选择租户ID"
+            clearable>
+            <el-option
+              v-for="tenant in tenantList"
+              :key="tenant.tenantId"
+              :label="tenant.tenantId"
+              :value="tenant.tenantId">
+            </el-option>
+          </el-select>
         </el-form-item>
+
         <el-form-item label="房东ID" prop="landlordId">
-          <el-input v-model="form.landlordId" placeholder="请输入房东ID" />
+          <el-select
+            v-model="form.landlordId"
+            placeholder="请选择房东ID"
+            clearable>
+            <el-option
+              v-for="landlord in landlordList"
+              :key="landlord.landlordId"
+              :label="landlord.landlordId"
+              :value="landlord.landlordId">
+            </el-option>
+          </el-select>
         </el-form-item>
+
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
-            v-model="form.createdAt"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择创建时间">
+                          v-model="form.createdAt"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="请选择创建时间">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -220,12 +254,17 @@
 
 <script>
 import { listUsermanage, getUsermanage, delUsermanage, addUsermanage, updateUsermanage } from "@/api/system/usermanage";
+import {listTenant} from "@/api/system/tenant";
+import { listLandlord } from "@/api/system/landlord"; // 请确保添加此导入
 
 export default {
   name: "Usermanage",
   dicts: ['ersonnel_management'],
   data() {
     return {
+      //查询租户ID
+      tenantList: [],
+      landlordList: [], // 新增房东列表
       // 遮罩层
       loading: true,
       // 选中数组
@@ -280,9 +319,23 @@ export default {
     };
   },
   created() {
+    this.getTenantList();
+    this.getLandlordList(); // 新增获取房东列表的方法调用
     this.getList();
   },
   methods: {
+    // 获取租户ID列表
+    getTenantList() {
+      listTenant().then(response => {
+        this.tenantList = response.rows; // 获取所有的租户信息
+      });
+    },
+    // 获取房东ID列表
+    getLandlordList() {
+      listLandlord().then(response => {
+        this.landlordList = response.rows; // 获取所有的房东信息
+      });
+    },
     /** 查询用户信息列表 */
     getList() {
       this.loading = true;

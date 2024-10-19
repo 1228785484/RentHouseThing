@@ -42,3 +42,11 @@ export function delTenant(tenantId) {
     method: 'delete'
   })
 }
+export function listTenants() {
+  return request({
+    url: '/system/tenants/list',
+    method: 'get'
+  })
+}
+
+

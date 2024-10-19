@@ -42,3 +42,6 @@ export function delPropertyattributes(attributeId) {
     method: 'delete'
   })
 }
+
+
+

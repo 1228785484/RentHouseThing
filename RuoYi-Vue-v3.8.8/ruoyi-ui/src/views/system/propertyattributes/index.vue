@@ -2,13 +2,20 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="房源ID" prop="propertyId">
-        <el-input
+        <el-select
           v-model="queryParams.propertyId"
-          placeholder="请输入房源ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+          placeholder="请选择房源ID"
+          clearable>
+          <el-option
+            v-for="property in propertyList"
+            :key="property.propertyId"
+            :label="property.propertyId"
+            :value="property.propertyId">
+          </el-option>
+        </el-select>
       </el-form-item>
+
+
       <el-form-item label="朝向" prop="orientation">
         <el-select v-model="queryParams.orientation" placeholder="请选择朝向" clearable>
           <el-option
@@ -67,10 +74,10 @@
       </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
-          v-model="queryParams.createdAt"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择创建时间">
+                        v-model="queryParams.createdAt"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        placeholder="请选择创建时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="房间号" prop="roomNumber">
@@ -185,7 +192,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -198,7 +205,17 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="房源ID" prop="propertyId">
-          <el-input v-model="form.propertyId" placeholder="请输入房源ID" />
+          <el-select
+            v-model="form.propertyId"
+            placeholder="请选择房源ID"
+            clearable>
+            <el-option
+              v-for="property in propertyList"
+              :key="property.propertyId"
+              :label="property.propertyId"
+              :value="property.propertyId">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="朝向" prop="orientation">
           <el-select v-model="form.orientation" placeholder="请选择朝向">
@@ -248,10 +265,10 @@
         </el-form-item>
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
-            v-model="form.createdAt"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择创建时间">
+                          v-model="form.createdAt"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+                          placeholder="请选择创建时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="房间号" prop="roomNumber">
@@ -268,7 +285,8 @@
 
 <script>
 import { listPropertyattributes, getPropertyattributes, delPropertyattributes, addPropertyattributes, updatePropertyattributes } from "@/api/system/propertyattributes";
-
+import { listTenants } from "@/api/system/tenant";
+import { listProperties } from "@/api/system/property";
 export default {
   name: "Propertyattributes",
   dicts: ['sys_yes_no', 'orientation'],
@@ -288,6 +306,8 @@ export default {
       total: 0,
       // 房源属性信息表格数据
       propertyattributesList: [],
+      // 用于存储获取的房源ID列表
+      propertyList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -308,7 +328,18 @@ export default {
         roomNumber: null
       },
       // 表单参数
-      form: {},
+      form: {
+        propertyId: null,
+        orientation: null,
+        hasIndependentBathroom: null,
+        hasAirConditioning: null,
+        numberOfBeds: null,
+        roomStructure: null,
+        hasBalcony: null,
+        furnitureTypes: null,
+        createdAt: null,
+        roomNumber: null
+      },
       // 表单校验
       rules: {
         propertyId: [
@@ -318,6 +349,7 @@ export default {
     };
   },
   created() {
+    this.getPropertyList(); // 调用获取房源ID列表的方法
     this.getList();
   },
   methods: {
@@ -328,6 +360,12 @@ export default {
         this.propertyattributesList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    // 获取房源ID列表的方法
+    getPropertyList() {
+      listPropertyattributes().then(response => {
+        this.propertyList = response.rows; // 获取所有的房源信息
       });
     },
     // 取消按钮
