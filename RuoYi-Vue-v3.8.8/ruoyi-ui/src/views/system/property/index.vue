@@ -189,6 +189,16 @@
 
     <!-- 添加查看房源信息对话框 -->
 <el-dialog :title="'查看房源信息'" :visible.sync="viewDialogVisible" width="50%" append-to-body>
+  <!-- 使用 image-preview 组件展示图片 -->
+  <div style="text-align: center; margin-bottom: 20px;">
+    <image-preview 
+      v-if="viewForm.imageUrl" 
+      :src="viewForm.imageUrl" 
+      :width="300"
+      :height="200"
+    />
+  </div>
+
   <el-descriptions :column="2" border>
     <el-descriptions-item label="房源ID">{{ viewForm.propertyId }}</el-descriptions-item>
     <el-descriptions-item label="房东ID">{{ viewForm.landlordId }}</el-descriptions-item>
