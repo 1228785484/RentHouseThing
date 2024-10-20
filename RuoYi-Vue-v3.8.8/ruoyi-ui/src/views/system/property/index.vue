@@ -218,30 +218,49 @@
   <el-divider content-position="center">房源属性信息</el-divider>
 
   <el-table :data="viewForm.propertyattributesList" border stripe>
-    <el-table-column label="朝向" prop="orientation" align="center">
-      <template slot-scope="scope">
-        <dict-tag :options="dict.type.orientation" :value="scope.row.orientation"/>
-      </template>
-    </el-table-column>
-    <el-table-column label="是否有独立卫浴" prop="hasIndependentBathroom" align="center">
-      <template slot-scope="scope">
-        <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasIndependentBathroom"/>
-      </template>
-    </el-table-column>
-    <el-table-column label="是否有空调" prop="hasAirConditioning" align="center">
-      <template slot-scope="scope">
-        <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasAirConditioning"/>
-      </template>
-    </el-table-column>
-    <el-table-column label="几人间" prop="numberOfBeds" align="center" />
-    <el-table-column label="房间结构" prop="roomStructure" align="center" />
-    <el-table-column label="是否有阳台" prop="hasBalcony" align="center">
-      <template slot-scope="scope">
-        <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasBalcony"/>
-      </template>
-    </el-table-column>
-    <el-table-column label="房间号" prop="roomNumber" align="center" />
-  </el-table>
+        <el-table-column label="朝向" prop="orientation" align="center">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.orientation" :value="scope.row.orientation"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否有独立卫浴" prop="hasIndependentBathroom" align="center">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasIndependentBathroom"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否有空调" prop="hasAirConditioning" align="center">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasAirConditioning"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="几人间" prop="numberOfBeds" align="center" />
+        <el-table-column label="房间结构" prop="roomStructure" align="center">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.room_structure" :value="scope.row.roomStructure"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否有阳台" prop="hasBalcony" align="center">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasBalcony"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="家具种类" prop="furnitureTypes" align="center">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.furniture_type" :value="scope.row.furnitureTypes ? scope.row.furnitureTypes.split(',') : []"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="房间号" prop="roomNumber" align="center" />
+        <el-table-column label="是否已用" prop="isOccupied" align="center">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.use_info" :value="scope.row.isOccupied"/>
+          </template>
+        </el-table-column>
+      </el-table>
 </el-dialog>
 
 
@@ -384,7 +403,7 @@ import LandlordSelector from '@/layout/components/Selectors/LandlordSelector.vue
 export default {
   name: "Property",
   components: {LocSelector,LandlordSelector},
-  dicts: ['sys_yes_no', 'sys_normal_disable', 'orientation'],
+  dicts: ['sys_yes_no', 'sys_normal_disable', 'orientation', 'room_structure', 'furniture_type', 'use_info'],
   data() {
     return {
       // 查看房源信息对话框
@@ -453,12 +472,14 @@ export default {
   methods: {
     /** 查看按钮操作 */
     handleView(row) {
+      this.reset();
       this.viewForm = JSON.parse(JSON.stringify(row));
       const propertyId = row.propertyId;
 
       getProperty(propertyId).then(response => {
         this.viewForm = response.data;
         this.viewForm.propertyattributesList = response.data.propertyattributesList;
+        console.log('propertyattributesList:', this.viewForm.propertyattributesList);
 
         // 获取房东信息
         getLandlordFromLandlordId(this.viewForm.landlordId).then(resp => {

@@ -32,6 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="furnitureTypes"    column="furniture_types"    />
         <result property="createdAt"    column="created_at"    />
         <result property="roomNumber"    column="room_number"    />
+        <result property="isOccupied"    column="is_occupied"    />
     </resultMap>
 
     <sql id="selectPropertyVo">
@@ -65,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectPropertyattributesList" resultType="Propertyattributes" resultMap="PropertyattributesResult">
-        select attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at, room_number
+        select attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at, room_number,is_occupied
         from propertyattributes
         where property_id = #{property_id}
     </select>
@@ -132,9 +133,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <insert id="batchPropertyattributes">
-        insert into propertyattributes( attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at, room_number) values
+        insert into propertyattributes( attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at, room_number, is_occupied) values
         <foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.attributeId}, #{item.propertyId}, #{item.orientation}, #{item.hasIndependentBathroom}, #{item.hasAirConditioning}, #{item.numberOfBeds}, #{item.roomStructure}, #{item.hasBalcony}, #{item.furnitureTypes}, #{item.createdAt}, #{item.roomNumber})
+            ( #{item.attributeId}, #{item.propertyId}, #{item.orientation}, #{item.hasIndependentBathroom}, #{item.hasAirConditioning}, #{item.numberOfBeds}, #{item.roomStructure}, #{item.hasBalcony}, #{item.furnitureTypes}, #{item.createdAt}, #{item.roomNumber}, #{item.isOccupied})
         </foreach>
     </insert>
 

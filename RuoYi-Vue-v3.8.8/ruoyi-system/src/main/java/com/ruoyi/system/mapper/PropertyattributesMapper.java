@@ -7,7 +7,7 @@ import com.ruoyi.system.domain.Propertyattributes;
  * 房源属性信息Mapper接口
  * 
  * @author ruoyi
- * @date 2024-10-09
+ * @date 2024-10-20
  */
 public interface PropertyattributesMapper 
 {

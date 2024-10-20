@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 房源属性信息对象 propertyattributes
  * 
  * @author ruoyi
- * @date 2024-10-09
+ * @date 2024-10-20
  */
 public class Propertyattributes extends BaseEntity
 {
@@ -60,6 +60,10 @@ public class Propertyattributes extends BaseEntity
     /** 房间号 */
     @Excel(name = "房间号")
     private String roomNumber;
+
+    /** 是否已用 */
+    @Excel(name = "是否已用")
+    private String isOccupied;
 
     public void setAttributeId(Long attributeId) 
     {
@@ -160,6 +164,15 @@ public class Propertyattributes extends BaseEntity
     {
         return roomNumber;
     }
+    public void setIsOccupied(String isOccupied) 
+    {
+        this.isOccupied = isOccupied;
+    }
+
+    public String getIsOccupied() 
+    {
+        return isOccupied;
+    }
 
     @Override
     public String toString() {
@@ -175,6 +188,7 @@ public class Propertyattributes extends BaseEntity
             .append("furnitureTypes", getFurnitureTypes())
             .append("createdAt", getCreatedAt())
             .append("roomNumber", getRoomNumber())
+            .append("isOccupied", getIsOccupied())
             .toString();
     }
 }

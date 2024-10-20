@@ -2,10 +2,7 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="房源ID" prop="propertyId">
-        <el-select
-          v-model="queryParams.propertyId"
-          placeholder="请选择房源ID"
-          clearable>
+        <el-select v-model="queryParams.propertyId" placeholder="请选择房源ID" clearable>
           <el-option
             v-for="property in propertyList"
             :key="property.propertyId"
@@ -14,8 +11,6 @@
           </el-option>
         </el-select>
       </el-form-item>
-
-
       <el-form-item label="朝向" prop="orientation">
         <el-select v-model="queryParams.orientation" placeholder="请选择朝向" clearable>
           <el-option
@@ -55,12 +50,14 @@
         />
       </el-form-item>
       <el-form-item label="房间结构" prop="roomStructure">
-        <el-input
-          v-model="queryParams.roomStructure"
-          placeholder="请输入房间结构"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.roomStructure" placeholder="请选择房间结构" clearable>
+          <el-option
+            v-for="dict in dict.type.room_structure"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="是否有阳台" prop="hasBalcony">
         <el-select v-model="queryParams.hasBalcony" placeholder="请选择是否有阳台" clearable>
@@ -72,12 +69,22 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="家具种类" prop="furnitureTypes">
+        <el-select v-model="queryParams.furnitureTypes" placeholder="请选择家具种类" clearable multiple collapse-tags>
+          <el-option
+            v-for="dict in dict.type.furniture_type"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="创建时间" prop="createdAt">
         <el-date-picker clearable
-                        v-model="queryParams.createdAt"
-                        type="date"
-                        value-format="yyyy-MM-dd"
-                        placeholder="请选择创建时间">
+          v-model="queryParams.createdAt"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择创建时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="房间号" prop="roomNumber">
@@ -87,6 +94,16 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
+      </el-form-item>
+      <el-form-item label="是否已用" prop="isOccupied">
+        <el-select v-model="queryParams.isOccupied" placeholder="请选择是否已用" clearable>
+          <el-option
+            v-for="dict in dict.type.use_info"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -160,19 +177,32 @@
         </template>
       </el-table-column>
       <el-table-column label="几人间" align="center" prop="numberOfBeds" />
-      <el-table-column label="房间结构" align="center" prop="roomStructure" />
+      <el-table-column label="房间结构" align="center" prop="roomStructure">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.room_structure" :value="scope.row.roomStructure"/>
+        </template>
+      </el-table-column>
       <el-table-column label="是否有阳台" align="center" prop="hasBalcony">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasBalcony"/>
         </template>
       </el-table-column>
-      <el-table-column label="家具种类" align="center" prop="furnitureTypes" />
+      <el-table-column label="家具种类" align="center" prop="furnitureTypes">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.furniture_type" :value="scope.row.furnitureTypes ? scope.row.furnitureTypes.split(',') : []"/>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="房间号" align="center" prop="roomNumber" />
+      <el-table-column label="是否已用" align="center" prop="isOccupied">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.use_info" :value="scope.row.isOccupied"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -192,7 +222,7 @@
         </template>
       </el-table-column>
     </el-table>
-
+    
     <pagination
       v-show="total>0"
       :total="total"
@@ -205,16 +235,13 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="房源ID" prop="propertyId">
-          <el-select
-            v-model="form.propertyId"
-            placeholder="请选择房源ID"
-            clearable>
+          <el-select v-model="form.propertyId" placeholder="请选择房源ID">
             <el-option
-              v-for="property in propertyList"
-              :key="property.propertyId"
-              :label="property.propertyId"
-              :value="property.propertyId">
-            </el-option>
+              v-for="item in propertyList"
+              :key="item.propertyId"
+              :label="item.propertyId"
+              :value="item.propertyId"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="朝向" prop="orientation">
@@ -228,51 +255,78 @@
           </el-select>
         </el-form-item>
         <el-form-item label="是否有独立卫浴" prop="hasIndependentBathroom">
-          <el-radio-group v-model="form.hasIndependentBathroom">
-            <el-radio
+          <el-select v-model="form.hasIndependentBathroom" placeholder="请选择是否有独立卫浴">
+            <el-option
               v-for="dict in dict.type.sys_yes_no"
               :key="dict.value"
-              :label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="是否有空调" prop="hasAirConditioning">
-          <el-radio-group v-model="form.hasAirConditioning">
-            <el-radio
+          <el-select v-model="form.hasAirConditioning" placeholder="请选择是否有空调">
+            <el-option
               v-for="dict in dict.type.sys_yes_no"
               :key="dict.value"
-              :label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="几人间" prop="numberOfBeds">
           <el-input v-model="form.numberOfBeds" placeholder="请输入几人间" />
         </el-form-item>
         <el-form-item label="房间结构" prop="roomStructure">
-          <el-input v-model="form.roomStructure" placeholder="请输入房间结构" />
+          <el-select v-model="form.roomStructure" placeholder="请选择房间结构">
+            <el-option
+              v-for="dict in dict.type.room_structure"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="是否有阳台" prop="hasBalcony">
-          <el-radio-group v-model="form.hasBalcony">
-            <el-radio
+          <el-select v-model="form.hasBalcony" placeholder="请选择是否有阳台">
+            <el-option
               v-for="dict in dict.type.sys_yes_no"
               :key="dict.value"
-              :label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="家具种类" prop="furnitureTypes">
-          <el-input v-model="form.furnitureTypes" type="textarea" placeholder="请输入内容" />
+          <el-select v-model="form.furnitureTypes" placeholder="请选择家具种类" multiple collapse-tags>
+            <el-option
+              v-for="dict in dict.type.furniture_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="创建时间" prop="createdAt">
           <el-date-picker clearable
-                          v-model="form.createdAt"
-                          type="date"
-                          value-format="yyyy-MM-dd"
-                          placeholder="请选择创建时间">
+            v-model="form.createdAt"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择创建时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="房间号" prop="roomNumber">
           <el-input v-model="form.roomNumber" placeholder="请输入房间号" />
+        </el-form-item>
+        <el-form-item label="是否已用" prop="isOccupied">
+          <el-select v-model="form.isOccupied" placeholder="请选择是否已用">
+            <el-option
+              v-for="dict in dict.type.use_info"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -285,11 +339,11 @@
 
 <script>
 import { listPropertyattributes, getPropertyattributes, delPropertyattributes, addPropertyattributes, updatePropertyattributes } from "@/api/system/propertyattributes";
-import { listTenants } from "@/api/system/tenant";
-import { listProperties } from "@/api/system/property";
+import { listProperty } from "@/api/system/property";
+
 export default {
   name: "Propertyattributes",
-  dicts: ['sys_yes_no', 'orientation'],
+  dicts: ['use_info', 'room_structure', 'furniture_type', 'sys_yes_no', 'orientation'],
   data() {
     return {
       // 遮罩层
@@ -306,7 +360,7 @@ export default {
       total: 0,
       // 房源属性信息表格数据
       propertyattributesList: [],
-      // 用于存储获取的房源ID列表
+      // 房源列表
       propertyList: [],
       // 弹出层标题
       title: "",
@@ -325,47 +379,37 @@ export default {
         hasBalcony: null,
         furnitureTypes: null,
         createdAt: null,
-        roomNumber: null
+        roomNumber: null,
+        isOccupied: null
       },
       // 表单参数
-      form: {
-        propertyId: null,
-        orientation: null,
-        hasIndependentBathroom: null,
-        hasAirConditioning: null,
-        numberOfBeds: null,
-        roomStructure: null,
-        hasBalcony: null,
-        furnitureTypes: null,
-        createdAt: null,
-        roomNumber: null
-      },
+      form: {},
       // 表单校验
       rules: {
         propertyId: [
-          { required: true, message: "房源ID不能为空", trigger: "blur" }
+          { required: true, message: "房源ID不能为空", trigger: "change" }
         ],
       }
     };
   },
   created() {
-    this.getPropertyList(); // 调用获取房源ID列表的方法
     this.getList();
+    this.getPropertyList();
   },
   methods: {
-    /** 查询房源属性信息列表 */
-    getList() {
+   /** 获取列表数据 */
+    getList(params = this.queryParams) {
       this.loading = true;
-      listPropertyattributes(this.queryParams).then(response => {
+      listPropertyattributes(params).then(response => {
         this.propertyattributesList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
     },
-    // 获取房源ID列表的方法
+    /** 获取房源列表 */
     getPropertyList() {
-      listPropertyattributes().then(response => {
-        this.propertyList = response.rows; // 获取所有的房源信息
+      listProperty().then(response => {
+        this.propertyList = response.rows;
       });
     },
     // 取消按钮
@@ -384,16 +428,26 @@ export default {
         numberOfBeds: null,
         roomStructure: null,
         hasBalcony: null,
-        furnitureTypes: null,
+        furnitureTypes: [],
         createdAt: null,
-        roomNumber: null
+        roomNumber: null,
+        isOccupied: null
       };
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      console.log("handleQuery method called");
+      console.log("queryParams:", JSON.stringify(this.queryParams, null, 2));
+      // 创建一个临时的查询参数对象
+      let tempQueryParams = JSON.parse(JSON.stringify(this.queryParams));
+
+      tempQueryParams.pageNum = 1;
+      if (Array.isArray(tempQueryParams.furnitureTypes)) {
+        tempQueryParams.furnitureTypes = tempQueryParams.furnitureTypes.join(',');
+      }
+       // 使用临时查询参数进行查询
+       this.getList(tempQueryParams);
     },
     /** 重置按钮操作 */
     resetQuery() {
@@ -418,6 +472,7 @@ export default {
       const attributeId = row.attributeId || this.ids
       getPropertyattributes(attributeId).then(response => {
         this.form = response.data;
+        this.form.furnitureTypes = this.form.furnitureTypes ? this.form.furnitureTypes.split(",") : [];
         this.open = true;
         this.title = "修改房源属性信息";
       });
@@ -426,6 +481,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.furnitureTypes = this.form.furnitureTypes.join(",");
           if (this.form.attributeId != null) {
             updatePropertyattributes(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");

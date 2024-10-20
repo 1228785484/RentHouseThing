@@ -16,10 +16,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="furnitureTypes"    column="furniture_types"    />
         <result property="createdAt"    column="created_at"    />
         <result property="roomNumber"    column="room_number"    />
+        <result property="isOccupied"    column="is_occupied"    />
     </resultMap>
 
     <sql id="selectPropertyattributesVo">
-        select attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at, room_number from propertyattributes
+        select attribute_id, property_id, orientation, has_independent_bathroom, has_air_conditioning, number_of_beds, room_structure, has_balcony, furniture_types, created_at, room_number, is_occupied from propertyattributes
     </sql>
 
     <select id="selectPropertyattributesList" parameterType="Propertyattributes" resultMap="PropertyattributesResult">
@@ -32,9 +33,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="numberOfBeds != null "> and number_of_beds = #{numberOfBeds}</if>
             <if test="roomStructure != null  and roomStructure != ''"> and room_structure = #{roomStructure}</if>
             <if test="hasBalcony != null  and hasBalcony != ''"> and has_balcony = #{hasBalcony}</if>
-            <if test="furnitureTypes != null  and furnitureTypes != ''"> and furniture_types = #{furnitureTypes}</if>
+            <if test="furnitureTypes != null and furnitureTypes != ''">
+                <foreach item="type" index="index" collection="furnitureTypes.split(',')" open=" and (" separator=" and " close=")">
+                    FIND_IN_SET(#{type}, furniture_types)
+                </foreach>
+            </if>
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
             <if test="roomNumber != null  and roomNumber != ''"> and room_number = #{roomNumber}</if>
+            <if test="isOccupied != null  and isOccupied != ''"> and is_occupied = #{isOccupied}</if>
         </where>
     </select>
     
@@ -56,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="furnitureTypes != null">furniture_types,</if>
             <if test="createdAt != null">created_at,</if>
             <if test="roomNumber != null">room_number,</if>
+            <if test="isOccupied != null">is_occupied,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="propertyId != null">#{propertyId},</if>
@@ -68,6 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="furnitureTypes != null">#{furnitureTypes},</if>
             <if test="createdAt != null">#{createdAt},</if>
             <if test="roomNumber != null">#{roomNumber},</if>
+            <if test="isOccupied != null">#{isOccupied},</if>
          </trim>
     </insert>
 
@@ -84,6 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="furnitureTypes != null">furniture_types = #{furnitureTypes},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
             <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="isOccupied != null">is_occupied = #{isOccupied},</if>
         </trim>
         where attribute_id = #{attributeId}
     </update>
