@@ -40,7 +40,7 @@
           :min="queryParams.minRentPrice || 0"
           @change="validateRentRange"
         />
-<!--        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleRentRangeQuery">租金范围搜索</el-button>-->
+        <!--        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleRentRangeQuery">租金范围搜索</el-button>-->
       </el-form-item>
 
       <el-form-item label="押金" prop="deposit">
@@ -188,36 +188,37 @@
     />
 
     <!-- 添加查看房源信息对话框 -->
-<el-dialog :title="'查看房源信息'" :visible.sync="viewDialogVisible" width="50%" append-to-body>
-  <!-- 使用 image-preview 组件展示图片 -->
-  <div style="text-align: center; margin-bottom: 20px;">
-    <image-preview 
-      v-if="viewForm.imageUrl" 
-      :src="viewForm.imageUrl" 
-      :width="300"
-      :height="200"
-    />
-  </div>
+    <el-dialog :title="'查看房源信息'" :visible.sync="viewDialogVisible" width="50%" append-to-body>
+      <!-- 使用 image-preview 组件展示图片 -->
+      <div style="text-align: center; margin-bottom: 20px;">
+        <image-preview
+          v-if="viewForm.imageUrl"
+          :src="viewForm.imageUrl"
+          :width="300"
+          :height="200"
+        />
+      </div>
 
-  <el-descriptions :column="2" border>
-    <el-descriptions-item label="房源ID">{{ viewForm.propertyId }}</el-descriptions-item>
-    <el-descriptions-item label="房东ID">{{ viewForm.landlordId }}</el-descriptions-item>
-    <el-descriptions-item label="房东">{{ viewForm.landlordName || viewForm.landlordId }}</el-descriptions-item>
-    <el-descriptions-item label="地址">{{ viewForm.address }}</el-descriptions-item>
-    <el-descriptions-item label="租金价格">{{ viewForm.rentPrice }}</el-descriptions-item>
-    <el-descriptions-item label="押金">{{ viewForm.deposit }}</el-descriptions-item>
-    <el-descriptions-item label="是否可用">
-      <dict-tag :options="dict.type.sys_normal_disable" :value="viewForm.available"/>
-    </el-descriptions-item>
-    <el-descriptions-item label="创建时间">
-      {{ parseTime(viewForm.createdAt, '{y}-{m}-{d}') }}
-    </el-descriptions-item>
-    <el-descriptions-item label="房源名字">{{ viewForm.propertyName }}</el-descriptions-item>
-  </el-descriptions>
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="房源ID">{{ viewForm.propertyId }}</el-descriptions-item>
+        <el-descriptions-item label="房东ID">{{ viewForm.landlordId }}</el-descriptions-item>
+        <el-descriptions-item label="房东">{{ viewForm.landlordName || viewForm.landlordId }}</el-descriptions-item>
+        <el-descriptions-item label="地址">{{ viewForm.address }}</el-descriptions-item>
+        <el-descriptions-item label="租金价格">{{ viewForm.rentPrice }}</el-descriptions-item>
+        <el-descriptions-item label="押金">{{ viewForm.deposit }}</el-descriptions-item>
+        <el-descriptions-item label="是否可用">
+          <dict-tag :options="dict.type.sys_normal_disable" :value="viewForm.available"/>
+        </el-descriptions-item>
+        <el-descriptions-item label="创建时间">
+          {{ parseTime(viewForm.createdAt, '{y}-{m}-{d}') }}
+        </el-descriptions-item>
+        <el-descriptions-item label="房源名字">{{ viewForm.propertyName }}</el-descriptions-item>
+        <el-descriptions-item label="剩余房间">{{ availableRooms }}</el-descriptions-item>
+      </el-descriptions>
 
-  <el-divider content-position="center">房源属性信息</el-divider>
+      <el-divider content-position="center">房源属性信息</el-divider>
 
-  <el-table :data="viewForm.propertyattributesList" border stripe>
+      <el-table :data="viewForm.propertyattributesList" border stripe>
         <el-table-column label="朝向" prop="orientation" align="center">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.orientation" :value="scope.row.orientation"/>
@@ -261,7 +262,7 @@
           </template>
         </el-table-column>
       </el-table>
-</el-dialog>
+    </el-dialog>
 
 
     <!-- 添加或修改房源信息对话框 -->
@@ -469,6 +470,19 @@ export default {
   created() {
     this.getList();
   },
+  computed: {
+    availableRooms() {
+      if (!this.viewForm.propertyattributesList) {
+        return '0/0';
+      }
+      const totalRooms = this.viewForm.propertyattributesList.length;
+      const occupiedRooms = this.viewForm.propertyattributesList.filter(
+        room => room.isOccupied === '0' // 假设 '0' 表示已使用
+      ).length;
+      const availableRooms = totalRooms - occupiedRooms;
+      return `${availableRooms}/${totalRooms}`;
+    }
+  },
   methods: {
     /** 查看按钮操作 */
     handleView(row) {
@@ -484,7 +498,7 @@ export default {
         // 获取房东信息
         getLandlordFromLandlordId(this.viewForm.landlordId).then(resp => {
           console.log(resp);
-          this.viewForm.landlordName = resp; // 使用新的属性名 landlordName
+          this.viewForm.landlordName = resp;
           this.viewDialogVisible = true;
         }).catch(error => {
           console.error("获取房东信息失败:", error);
@@ -712,3 +726,4 @@ export default {
   }
 };
 </script>
+
