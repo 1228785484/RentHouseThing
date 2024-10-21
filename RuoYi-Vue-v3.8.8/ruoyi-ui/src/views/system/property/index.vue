@@ -213,7 +213,7 @@
           {{ parseTime(viewForm.createdAt, '{y}-{m}-{d}') }}
         </el-descriptions-item>
         <el-descriptions-item label="房源名字">{{ viewForm.propertyName }}</el-descriptions-item>
-        <el-descriptions-item label="剩余房间">{{ availableRooms }}</el-descriptions-item>
+        <el-descriptions-item label="已用房间">{{ availableRooms }}</el-descriptions-item>
       </el-descriptions>
 
       <el-divider content-position="center">房源属性信息</el-divider>
