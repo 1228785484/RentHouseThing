@@ -16,15 +16,15 @@ import java.io.IOException;
 public class RuoYiApplication
 {
     public static void main(String[] args){
-        //D:\RentHouse\RuoYi-Vue-v3.8.8\ruoyi-admin\src\main\java\com\ruoyi\libs\Redis\redis-server.exe
-        ProcessBuilder processBuilder = new ProcessBuilder("RuoYi-Vue-v3.8.8\\ruoyi-admin\\src\\main\\java\\com\\ruoyi\\libs\\Redis\\redis-server.exe");
-        // 设置工作目录为项目的根目录
-        processBuilder.directory(new File(System.getProperty("user.dir")));
-        try {
-            processBuilder.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        //D:\RentHouse\RuoYi-Vue-v3.8.8\ruoyi-admin\src\main\java\com\ruoyi\libs\Redis\redis-server.exe
+//        ProcessBuilder processBuilder = new ProcessBuilder("RuoYi-Vue-v3.8.8\\ruoyi-admin\\src\\main\\java\\com\\ruoyi\\libs\\Redis\\redis-server.exe");
+//        // 设置工作目录为项目的根目录
+//        processBuilder.directory(new File(System.getProperty("user.dir")));
+//        try {
+//            processBuilder.start();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
         // System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(RuoYiApplication.class, args);
